@@ -1,35 +1,38 @@
-package main.java;
-
 public class Persoon {
+    private static int geboortedatum;
     private int bsn;
-    private String voornaam;
-    private String achternaam;
-    private int geboortedatum;
+    private static String voornaam;
+    private static String achternaam;
     private char geslacht;
 
 
     public Persoon(int bsn, String voornaam, String achternaam, int geboortedatum, char geslacht) {
         this.bsn = bsn;
-        this.voornaam = voornaam;
-        this.achternaam = achternaam;
-        this.geboortedatum = geboortedatum;
+        Persoon.voornaam = voornaam;
+        Persoon.achternaam = achternaam;
+        Persoon.geboortedatum = geboortedatum;
         this.geslacht = geslacht;
     }
 
-        public void setBsn ( int bsn){
+    @Override
+    public String toString() {
+        return "Persoon{" + "bsn=" + bsn + ", voornaam='" + voornaam + '\'' + ", achternaam='" + achternaam + '\'' + ", geslacht=" + geslacht + '}';
+    }
+
+    public void setBsn (int bsn){
             this.bsn = bsn;
         }
 
         public void setVoornaam (String voornaam){
-            this.voornaam = voornaam;
+            Persoon.voornaam = voornaam;
         }
 
         public void setAchternaam (String achternaam){
-            this.achternaam = achternaam;
+            Persoon.achternaam = achternaam;
         }
 
         public void setGeboortedatum ( int geboortedatum){
-            this.geboortedatum = geboortedatum;
+            Persoon.geboortedatum = geboortedatum;
         }
 
         public void setGeslacht ( char geslacht){
@@ -39,8 +42,9 @@ public class Persoon {
          public char getGeslacht() {
              switch (geslacht) {
                  case 'm':
+                     System.out.println("Man");
                  case 'v':
-                     System.out.println("Deze gender is valide");
+                     System.out.println("Vrouw");
                      break;
                  default:
                      throw new IllegalStateException("Unexpected value: " + geslacht);
@@ -52,15 +56,15 @@ public class Persoon {
             return bsn;
         }
 
-        public String getVoornaam() {
+        public static String getVoornaam() {
             return voornaam;
         }
 
-        public String getAchternaam() {
+        public static String getAchternaam() {
             return achternaam;
         }
 
-        public int getGeboortedatum() {
+        public static int getGeboortedatum() {
             return geboortedatum;
         }
 }
