@@ -82,8 +82,13 @@ public class Datum {
 	 *
 	 * @return Geboortedatum
 	 */
-	public String getDatumAsString() {
-		// TODO
-		return "";
-	}
+    public String getDatumAsString() {
+        int geboortedatum = Persoon.getGeboortedatum();
+        String datum = String.valueOf(geboortedatum);
+        if(datum.equals("")){
+            System.out.println("De gegevens zijn onbekend");
+        }
+
+        return datum;
+    }
 }
