@@ -3,7 +3,17 @@ public class Datum {
 	private int dag;
 	private int maand;
 	private int jaar;
-
+	
+	/**
+	 * Constructor
+	 */
+	public Datum(int dag, int maand, int jaar) {
+		this.dag = dag;
+		this.maand = maand ;
+		this.jaar = jaar;
+		bestaatDatum(dag, maand, jaar);
+	}
+	
 	/**
 	 * Constructor
 	 */
