@@ -6,6 +6,7 @@ public class Artikel {
     private int verkoopPrijs;
     private int hoeveelheid;
     private ArrayList<Artikel> artikelen;
+    private Persoon persoon;
     /**
      * De contructor van Artikel
      * @param naam naam van artikel
@@ -36,10 +37,10 @@ public class Artikel {
     }
 
     public String getKlantVoornaam(){
-        return Persoon.getVoornaam();
+        return persoon.getVoornaam();
     }
     public String getKlantAchternaam(){
-        return Persoon.getAchternaam();
+        return persoon.getAchternaam();
     }
 
     /**

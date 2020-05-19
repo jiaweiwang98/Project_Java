@@ -3,7 +3,7 @@ public class Datum {
 	private int dag;
 	private int maand;
 	private int jaar;
-	
+	private Persoon persoon;
 	/**
 	 * Constructor
 	 */
@@ -93,7 +93,7 @@ public class Datum {
 	 * @return Geboortedatum
 	 */
     public String getDatumAsString() {
-        int geboortedatum = Persoon.getGeboortedatum();
+        String geboortedatum = persoon.getGeboorteDatum();
         String datum = String.valueOf(geboortedatum);
         if(datum.equals("")){
             System.out.println("De gegevens zijn onbekend");

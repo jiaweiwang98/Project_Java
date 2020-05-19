@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 
 public class Dienblad extends Artikel {
     private ArrayList<Artikel> artikelen;
-    private int capacity;
     private double totalePrijs;
     private int aantalArtikelen;
 
@@ -14,15 +13,11 @@ public class Dienblad extends Artikel {
      */
     public Dienblad(Artikel naam,int capacity, double totalePrijs) {
         aantalArtikelen = 0;
-        this.capacity = 5;
         this.totalePrijs= 0.0;
         artikelen = new ArrayList<>();
 
     }
 
-    public Dienblad(Persoon persoon){
-
-    }
 
     /**
      * Methode om artikel aan dienblad toe te voegen
@@ -44,7 +39,7 @@ public class Dienblad extends Artikel {
     public int getAantalArtikelen() {
         for(Artikel artikel : artikelen){
             int aantalArtikelen = artikelen.size();
-          System.out.println("Het aantal artikelen zijn:\n"+artikel);
+          System.out.println("Het aantal artikelen zijn:\n"+aantalArtikelen);
           System.out.println("Het totaal bedrag: "+getTotaalPrijs());
         }
         return getAantalArtikelen();
