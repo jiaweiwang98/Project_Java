@@ -43,9 +43,9 @@ public class KassaRij {
      */
     public boolean isErEenRij() {
         if(dienblad.isEmpty()){
-            return true;
-        }else{
             return false;
+        }else{
+            return true;
         }
     }
 }
