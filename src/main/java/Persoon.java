@@ -4,46 +4,47 @@ class Persoon {
     private int bsn;
     private String voornaam;
     private String achternaam;
-    private int dag;
-    private int maand;
-    private int jaar;
-    private char geslacht;
-    private ArrayList<Dienblad> dienbladen;
-    private ArrayList<Artikel> artikelen;
+    private Datum geboortedatum;
+    private char geslacht;;
     private Dienblad dienbladPersoon;
-    private Artikel artikel;
-
+    private ArrayList<Artikel> artikelen;
     /**
      *
      * Hiermee worden alle velden ingesteld wanneer dit object 
      * gemaakt wordt. 
      */
-    public Persoon(int persoonBSN, String persoonvoornaam, String persoonachternaam,
-                   int persoondag, int persoonmaand, int persoonjaar, char persoongeslacht)
+    public Persoon(int bsn, String voornaam, String achternaam,
+                   Datum geboortedatum, char geslacht)
     {
-        setBSN(persoonBSN);
-        setVoornaam(persoonvoornaam);
-        setAchternaam(persoonachternaam);
-        setGeslacht(persoongeslacht);
-        setGeboortedatum(persoondag, persoonmaand, persoonjaar);
+        this.bsn = bsn;
+        this.voornaam = voornaam;
+        this.achternaam = achternaam;
+        this.geslacht = geslacht;
+        this.geboortedatum = geboortedatum;
+
     }
 
     /**
      * Hiermee worden alle velden ingesteld wanneer dit object 
      * gemaakt wordt. 
-     * geslacht: man = 1 en vrouw = 0 
+     * geslacht: man = 1 en vrouw = 0
      */
     public Persoon()
     {
-        bsn = 12341;
-        voornaam = "Erik";
-        achternaam = "Hoekstra";
-        geslacht = 1;
+        /*geslacht = 1;
         setGeslacht('M');
-        dag = 26;
-        maand = 1;
-        jaar = 1994;
-        setGeboortedatum(26, 1, 1994);
+
+        geslacht = 2;
+        setGeslacht('V');*/
+
+    }
+
+    @Override
+    public String toString() {
+        return "Persoon{" +
+                "geboortedatum=" + geboortedatum +
+                ", geslacht=" + geslacht +
+                '}';
     }
 
     /**
@@ -71,88 +72,6 @@ class Persoon {
     }
 
     /**
-     * Verander de Geboortedatum.
-     */
-    public void setGeboortedatum(int dag, int maand, int jaar)
-    {
-        boolean uitkomst;
-        this.dag = dag;
-        this.maand = maand;
-        this.jaar = jaar;
-        if(dag>=1 && maand>=1 && maand<=12 && jaar>=1900 && jaar<=2100)
-        {
-            switch (maand) {
-                case 1: case 3: case 5:
-                case 7: case 8: case 10:
-                case 12:
-                    if (dag >=1 && dag <=31)
-                    {
-                        uitkomst = true;
-                        break;
-                    }
-                    else
-                    {
-                        uitkomst = false;
-                        break;
-                    }
-                case 4: case 6:
-                case 9: case 11:
-                    if (dag >=1 && dag <=30)
-                    {
-                        uitkomst = true;
-                        break;
-                    }
-                    else
-                    {
-                        uitkomst = false;
-                        break;
-                    }
-                case 2:
-                    if (((jaar % 4 == 0) &&
-                            !(jaar % 100 == 0))
-                            || (jaar % 400 == 0)){
-                        if (dag >=1 && dag <=29)
-                        {
-                            uitkomst = true;
-                            break;
-                        }else
-                        {
-                            uitkomst = false;
-                            break;
-                        }
-                    } else if (dag >=1 && dag <=28)
-                    {
-                        uitkomst = true;
-                        break;
-                    }
-                    else{
-                        uitkomst = false;
-                        break;
-                    }
-                default:
-                    uitkomst = false;
-                    break;
-
-            }
-        }else
-        {
-            uitkomst = false;
-        }
-
-        if(uitkomst == false)
-        {
-            this.dag = 0;
-            this.maand = 0;
-            this.jaar = 0;
-        }else if(uitkomst == true)
-        {
-            this.dag = dag;
-            this.maand = maand;
-            this.jaar = jaar;
-        }
-    }
-
-    /**
      * Verander het Geslacht.
      * Man = 1    en    Vrouw = 0
      */
@@ -167,31 +86,8 @@ class Persoon {
         }
     }
 
-    /**
-     * laat de waarden van de instantievariabelen zien.
-     */
-    public void DrukAf()
-    {
-        System.out.println("#######################");
-        System.out.println("# BSN: " + getBSN());
-        System.out.println("# Naam: " + getVoornaam() + " "+ getAchternaam());
-        System.out.println("# Geboortedatum: "+getGeboorteDatum());
-        System.out.println("# Geslacht: " + getGeslacht());
-        System.out.println("#######################");
-    }
-
-    /**
-     * Getter voor geboortedatum
-     * @return Geboortedatum
-     */
-    public String getGeboorteDatum() {
-        String temp;
-        if (dag==0 && maand==0 && jaar==0) {
-            temp="Onbekend";
-        } else {
-            temp=dag+"/"+maand+"/"+jaar;
-        }
-        return temp;
+    public void setGeboortedatum(Datum geboortedatum) {
+        this.geboortedatum = geboortedatum;
     }
 
     /**
@@ -239,12 +135,16 @@ class Persoon {
         return bsn;
     }
 
+    public String getGeboortedatum() {
+        return geboortedatum.getDatumAsString();
+    }
+
     /**
      * Methode om dienblad te koppelen aan een persoon
      * @param persoon
      */
     public void pakDienblad(Dienblad persoon) {
-        dienbladPersoon = new Dienblad(artikelen.get(0), 0,0.0);
+        dienbladPersoon = new Dienblad();
     }
 
     /**

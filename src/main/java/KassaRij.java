@@ -32,8 +32,7 @@ public class KassaRij {
         if(dienblad.isEmpty()){
             return null;
         }else{
-            return dienblad.get(0);
-
+            return dienblad.remove(0);
         }
     }
 
@@ -43,6 +42,10 @@ public class KassaRij {
      * @return Of er wel of geen rij bestaat
      */
     public boolean isErEenRij() {
-        return dienblad.isEmpty();
+        if(dienblad.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

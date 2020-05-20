@@ -4,7 +4,6 @@ import java.util.ArrayList;
 public class Artikel {
     private String naam;
     private int verkoopPrijs;
-    private int hoeveelheid;
     private ArrayList<Artikel> artikelen;
     private Persoon persoon;
     /**
@@ -12,10 +11,9 @@ public class Artikel {
      * @param naam naam van artikel
      * @param verkoopPrijs verkoop prijs van het artikel
      */
-    public Artikel(String naam, int verkoopPrijs, int hoeveelheid) {
+    public Artikel(String naam, int verkoopPrijs) {
         this.naam = naam;
         this.verkoopPrijs = verkoopPrijs;
-        this.hoeveelheid = hoeveelheid;
     }
 
     public Artikel() {
@@ -28,12 +26,8 @@ public class Artikel {
     }
 
     @Override
-    public String toString ()
-    {
-        NumberFormat fmt = NumberFormat.getCurrencyInstance();
-
-        return (naam + "\t" + fmt.format(verkoopPrijs) + "\t" + hoeveelheid + "\t"
-                + fmt.format(verkoopPrijs*hoeveelheid));
+    public String toString() {
+        return "Artikel{" + "naam='" + naam + '\'' + ", verkoopPrijs=" + verkoopPrijs + '}';
     }
 
     public String getKlantVoornaam(){
@@ -76,7 +70,4 @@ public class Artikel {
         this.verkoopPrijs = verkoopPrijs;
     }
 
-    public int getHoeveelheid(){
-        return hoeveelheid;
-    }
 }
