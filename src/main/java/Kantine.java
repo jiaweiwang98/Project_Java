@@ -2,6 +2,8 @@ public class Kantine {
 
     private Kassa kassa;
     private KassaRij kassarij;
+    private KantineAanbod kantineaanbod;
+
 
     /**
      * Constructor
@@ -11,47 +13,39 @@ public class Kantine {
         kassa = new Kassa(kassarij);
     }
 
-    /**
-     * In deze methode wordt een Persoon en Dienblad gemaakt en aan elkaar gekoppeld. Maak twee
-     * Artikelen aan en plaats deze op het dienblad. Tenslotte sluit de Persoon zich aan bij de rij
-     * voor de kassa.
-     */
-    public void loopPakSluitAan() {
-        // method body omitted
+    public Kassa getKassa() {
+        return kassa;
     }
+
+    public KantineAanbod getKantineaanbod() {
+        return kantineaanbod;
+    }
+
+    public void setKantineAanbod(KantineAanbod kantineaanbod) {
+        this.kantineaanbod = kantineaanbod;
+    }
+
+    /**
+     * In deze methode wordt een Dienblad met artikelen
+     * in de kassarij geplaatst
+     *
+     * @param dienblad
+     */
+    public void loopPakSluitAan(Dienblad dienblad, String[] artikelnamen) {
+        for(String artikel : artikelnamen) {
+
+        dienblad.voegToe(kantineaanbod.getArtikel(artikel));
+        }
+        kassarij.sluitAchteraan(dienblad);
+      }
 
     /**
      * Deze methode handelt de rij voor de kassa af.
      */
     public void verwerkRijVoorKassa() {
-        while () {
-            // omitted
+        while (kassarij.isErEenRij()) {
+            kassa.rekenAf(kassarij.eerstePersoonInRij());
         }
     }
-
-    /**
-     * Deze methode telt het geld uit de kassa
-     *
-     * @return hoeveelheid geld in kassa
-     */
-    public double hoeveelheidGeldInKassa() {
-        // method body omitted
-    }
-
-    /**
-     * Deze methode geeft het aantal gepasseerde artikelen.
-     *
-     * @return het aantal gepasseerde artikelen
-     */
-    public int aantalArtikelen() {
-        // method body omitted
-    }
-
-    /**
-     * Deze methode reset de bijgehouden telling van het aantal artikelen en "leegt" de inhoud van
-     * de kassa.
-     */
-    public void resetKassa() {
-        // method body omitted
-    }
 }
+
