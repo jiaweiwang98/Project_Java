@@ -2,15 +2,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class KassaRij {
-
-    private ArrayList<Dienblad> dienblad;
-
+    
+private LinkedList<Dienblad> dienblad;
 
     /**
      * Constructor
      */
     public KassaRij() {
-        dienblad = new ArrayList<>();
+        dienblad = new LinkedList<>();
     }
 
     /**
