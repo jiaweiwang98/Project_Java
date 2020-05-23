@@ -1,21 +1,31 @@
-import java.util.ArrayList;
+import java.util.Stack;
+import java.util.Iterator;
+
 
 public class Dienblad extends Artikel {
-    private ArrayList<Artikel> artikelen;
+    private Stack<Artikel> artikelen;
+    private Iterator<Artikel> artikelIterator;
     private double totalePrijs;
     private int aantalArtikelen;
+    private Persoon klant;
 
 
     /**
      * Constructor
      */
     public Dienblad() {
-        this.aantalArtikelen = 0;
+        aantalArtikelen = 0;
         this.totalePrijs= 0.0;
-        artikelen = new ArrayList<>();
+        artikelen = new Stack<>();
 
     }
 
+    /**
+     * Constructor voor klant
+     */
+    public Dienblad(Persoon klant) {
+        this.klant = klant;
+    }
 
     /**
      * Methode om artikel aan dienblad toe te voegen
@@ -23,7 +33,10 @@ public class Dienblad extends Artikel {
      * @param artikel
      */
     public void voegToe(Artikel artikel) {
+
        artikelen.add(artikel);
+       totalePrijs += getVerkoopPrijs();
+       aantalArtikelen++;
     }
 
     /**
@@ -32,9 +45,7 @@ public class Dienblad extends Artikel {
      * @return Het aantal artikelen
      */
     public int getAantalArtikelen() {
-
-        int aantalArtikelen = artikelen.size();
-        return aantalArtikelen;
+        return artikelen.size();
     }
 
     /**
@@ -46,11 +57,22 @@ public class Dienblad extends Artikel {
         double totaalprijs = 0;
         for(Artikel artikel : artikelen){
             if(artikel != null){
-                totaalprijs = getVerkoopPrijs() * getAantalArtikelen();
+                totaalprijs = getVerkoopPrijs()*getAantalArtikelen();
             }
         }
         return totaalprijs;
     }
 
-}
+    public Persoon getKlant() {
+        return klant;
+    }
 
+    public void setKlant(Persoon klant) {
+        this.klant = klant;
+    }
+
+    public Iterator<Artikel> getArtikelIterator() {
+        artikelIterator = artikelen.iterator();
+        return artikelIterator;
+    }
+}
