@@ -3,17 +3,17 @@ import java.util.ArrayList;
 
 public class Artikel {
     private String naam;
-    private int verkoopPrijs;
-    private ArrayList<Artikel> artikelen;
+    private double verkoopPrijs;
     private Persoon persoon;
     /**
      * De contructor van Artikel
      * @param naam naam van artikel
      * @param verkoopPrijs verkoop prijs van het artikel
      */
-    public Artikel(String naam, int verkoopPrijs) {
+    public Artikel(String naam, double verkoopPrijs) {
         this.naam = naam;
         this.verkoopPrijs = verkoopPrijs;
+
     }
 
     public Artikel() {
@@ -21,13 +21,12 @@ public class Artikel {
         this.verkoopPrijs = 0;
     }
 
-    public ArrayList<Artikel> getArtikel(){
-        return artikelen;
-    }
-
     @Override
     public String toString() {
-        return "Artikel{" + "naam='" + naam + '\'' + ", verkoopPrijs=" + verkoopPrijs + '}';
+        return "Artikel{" +
+                "naam='" + naam + '\'' +
+                ", verkoopPrijs=" + verkoopPrijs +
+                '}';
     }
 
     public String getKlantVoornaam(){
@@ -58,7 +57,7 @@ public class Artikel {
      * @return verkoop prijs van het artikel
      */
 
-    public int getVerkoopPrijs() {
+    public double getVerkoopPrijs() {
         return verkoopPrijs;
     }
 
@@ -66,8 +65,9 @@ public class Artikel {
      *
      * @param verkoopPrijs word een prijs gegeven aan het artikel
      */
-    public void setVerkoopPrijs(int verkoopPrijs) {
+    public void setVerkoopPrijs(double verkoopPrijs) {
         this.verkoopPrijs = verkoopPrijs;
     }
+
 
 }
