@@ -1,6 +1,6 @@
 import java.util.*;
 
-class KantineSimulatie {
+public class KantineSimulatie {
 
     // kantine
     private Kantine kantine;
