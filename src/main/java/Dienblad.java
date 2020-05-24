@@ -25,6 +25,7 @@ public class Dienblad extends Artikel {
      */
     public Dienblad(Persoon klant) {
         this.klant = klant;
+        artikelen = new Stack<>();
     }
 
     /**
