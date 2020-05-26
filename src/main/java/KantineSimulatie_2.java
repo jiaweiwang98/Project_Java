@@ -134,9 +134,14 @@ public class KantineSimulatie {
             // verwerk rij voor de kassa
             kantine.verwerkRijVoorKassa();
             // druk de dagtotalen af en hoeveel personen binnen
-            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen() + "Hoeveelheid geld in kassa: " + kantine.getKassa().hoeveelheidGeldInKassa());
             // zijn gekomen
+           System.out.println(" ");
+            System.out.println("Dagtotalen van dag "  + (i + 1) + ": ");
+            System.out.println("---------------------------------");
             System.out.println("Aantal personen: " +aantalpersonen);
+            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen());
+            System.out.println("Hoeveelheid geld in kassa: " + Math.round(kantine.getKassa().hoeveelheidGeldInKassa() * 100.0) / 100.0);
+            System.out.println(" ");
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
         }
