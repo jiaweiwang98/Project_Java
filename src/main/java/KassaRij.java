@@ -41,10 +41,6 @@ private LinkedList<Dienblad> dienblad;
      * @return Of er wel of geen rij bestaat
      */
     public boolean isErEenRij() {
-        if(dienblad.isEmpty()){
-            return false;
-        }else{
-            return true;
-        }
+        return (kassaRij.size() > 0);
     }
 }
