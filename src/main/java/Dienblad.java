@@ -4,8 +4,6 @@ import java.util.Iterator;
 
 public class Dienblad extends Artikel {
     private Stack<Artikel> artikelen;
-    private Iterator<Artikel> artikelIterator;
-    private double totalePrijs;
     private int aantalArtikelen;
     private Persoon klant;
 
@@ -14,8 +12,6 @@ public class Dienblad extends Artikel {
      * Constructor
      */
     public Dienblad() {
-        aantalArtikelen = 0;
-        this.totalePrijs= 0.0;
         artikelen = new Stack<>();
 
     }
@@ -34,9 +30,6 @@ public class Dienblad extends Artikel {
      * @param artikel
      */
     public void voegToe(Artikel artikel) {
-
-       artikelen.add(artikel);
-       totalePrijs += getVerkoopPrijs();
        aantalArtikelen++;
     }
 
