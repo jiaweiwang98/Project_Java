@@ -32,10 +32,12 @@ public class Kantine {
      * @param dienblad
      */
     public void loopPakSluitAan(Dienblad dienblad, String[] artikelnamen) {
-        for(String artikel : artikelnamen) {
+        System.out.println(" ");
 
-        dienblad.voegToe(kantineaanbod.getArtikel(artikel));
+        for(String artikel : artikelnamen) {
+            dienblad.voegToe(kantineaanbod.getArtikel(artikel));
         }
+
         kassarij.sluitAchteraan(dienblad);
       }
 
@@ -48,4 +50,3 @@ public class Kantine {
         }
     }
 }
-

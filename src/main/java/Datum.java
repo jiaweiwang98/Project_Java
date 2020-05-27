@@ -3,6 +3,7 @@ public class Datum {
 	private int dag;
 	private int maand;
 	private int jaar;
+	private Persoon persoon;
 	/**
 	 * Constructor
 	 */
@@ -87,16 +88,17 @@ public class Datum {
 
 
 	/**
-	 * Getter voor geboortedatum
+	 * Getter voor Sting weergave van datum
+	 *
 	 * @return Geboortedatum
 	 */
-	public String getDatumAsString() {
-		String temp;
-		if (dag==0 && maand==0 && jaar==0) {
-		temp="Onbekend";
-		} else {
-		temp=dag+"/"+maand+"/"+jaar;
-		}
-		return temp;
-		}
+    public String getDatumAsString() {
+        String geboortedatum = persoon.getGeboortedatum();
+        String datum = String.valueOf(geboortedatum);
+        if(datum.equals("")){
+            System.out.println("De gegevens zijn onbekend");
+        }
+
+        return datum;
+    }
 }

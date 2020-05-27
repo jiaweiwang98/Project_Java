@@ -1,6 +1,9 @@
 import java.util.*;
 
-public class KantineSimulatie {
+class KantineSimulatie {
+
+    // dagen
+    public static final int DAGEN = 7;
 
     // kantine
     private Kantine kantine;
@@ -45,6 +48,22 @@ public class KantineSimulatie {
         kantineaanbod = new KantineAanbod(artikelnamen, artikelprijzen, hoeveelheden);
 
         kantine.setKantineAanbod(kantineaanbod);
+    }
+
+    /**
+     * Start een simulatie
+     */
+    public static void main(String[] args) {
+        int dagen;
+
+        if (args.length == 0) {
+            dagen = DAGEN;
+        } else {
+            dagen = Integer.parseInt(args[0]);
+        }
+
+        KantineSimulatie kantineSimulatie = new KantineSimulatie();
+        kantineSimulatie.simuleer(dagen);
     }
 
     /**
@@ -100,7 +119,7 @@ public class KantineSimulatie {
      *
      * @param dagen
      */
-   public void simuleer(int dagen) {
+    public void simuleer(int dagen) {
         // for lus voor dagen
         for(int i = 0; i < dagen; i++) {
 
@@ -122,10 +141,11 @@ public class KantineSimulatie {
                 int[] tepakken = getRandomArray(
                     aantalartikelen, 0, AANTAL_ARTIKELEN-1);
 
+
+
                 // vind de artikelnamen op basis van
                 // de indexen hierboven
                 String[] artikelen = geefArtikelNamen(tepakken);
-
                 // loop de kantine binnen, pak de gewenste
                 // artikelen, sluit aan
                 kantine.loopPakSluitAan(dienbladVanPersoon, artikelen);
@@ -134,9 +154,14 @@ public class KantineSimulatie {
             // verwerk rij voor de kassa
             kantine.verwerkRijVoorKassa();
             // druk de dagtotalen af en hoeveel personen binnen
-            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen() + "Hoeveelheid geld in kassa: " + kantine.getKassa().hoeveelheidGeldInKassa());
             // zijn gekomen
+            System.out.println(" ");
+            System.out.println("Dagtotalen van dag "  + (i + 1) + ": ");
+            System.out.println("---------------------------------");
             System.out.println("Aantal personen: " +aantalpersonen);
+            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen());
+            System.out.println("Hoeveelheid geld in kassa: " + Math.round(kantine.getKassa().hoeveelheidGeldInKassa() * 100.0) / 100.0);
+            System.out.println(" ");
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
         }

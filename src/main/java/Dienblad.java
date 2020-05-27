@@ -1,12 +1,11 @@
 import java.util.Stack;
 import java.util.Iterator;
+import java.text.NumberFormat;
 
 
 public class Dienblad extends Artikel {
     private Stack<Artikel> artikelen;
     private Iterator<Artikel> artikelIterator;
-    private double totalePrijs;
-    private int aantalArtikelen;
     private Persoon klant;
 
 
@@ -14,8 +13,6 @@ public class Dienblad extends Artikel {
      * Constructor
      */
     public Dienblad() {
-        aantalArtikelen = 0;
-        this.totalePrijs= 0.0;
         artikelen = new Stack<>();
 
     }
@@ -25,6 +22,7 @@ public class Dienblad extends Artikel {
      */
     public Dienblad(Persoon klant) {
         this.klant = klant;
+        artikelen = new Stack<>();
     }
 
     /**
@@ -33,10 +31,7 @@ public class Dienblad extends Artikel {
      * @param artikel
      */
     public void voegToe(Artikel artikel) {
-
-       artikelen.add(artikel);
-       totalePrijs += getVerkoopPrijs();
-       aantalArtikelen++;
+        artikelen.add(artikel);
     }
 
     /**
@@ -56,9 +51,7 @@ public class Dienblad extends Artikel {
     public double getTotaalPrijs() {
         double totaalprijs = 0;
         for(Artikel artikel : artikelen){
-            if(artikel != null){
                 totaalprijs = getVerkoopPrijs()*getAantalArtikelen();
-            }
         }
         return totaalprijs;
     }
@@ -76,3 +69,6 @@ public class Dienblad extends Artikel {
         return artikelIterator;
     }
 }
+
+
+

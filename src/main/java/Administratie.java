@@ -1,6 +1,6 @@
-package main.java;
-
 public class Administratie {
+
+    private static final int DAYSINWEEK = 7 ;
 
     /**
      * Deze methode berekent van de int array aantal de gemiddelde waarde
@@ -9,7 +9,12 @@ public class Administratie {
      * @return het gemiddelde
      */
     public double berekenGemiddeldAantal(int[] aantal) {
-        // method body omitted
+        double toReturn = 0;
+        for (int amount : aantal) {
+            toReturn += amount;
+        }
+        toReturn = toReturn / aantal.length;
+        return toReturn;
     }
 
     /**
@@ -18,8 +23,16 @@ public class Administratie {
      * @param omzet
      * @return het gemiddelde
      */
-    public double berekenGemiddeldeOmzet(double[] omzet) {
-        // method body omitted
+    public double[] berekenGemiddeldeOmzet(double[] omzet) {
+        double[] toReturn;
+        toReturn = berekenDagOmzet(omzet);
+        int counter = 0;
+        for (double amount: toReturn) {
+            toReturn[counter] = amount / Math.floor((double)omzet.length/7);
+            counter++;
+        }
+
+        return toReturn;
     }
 
     /**
@@ -30,15 +43,15 @@ public class Administratie {
      */
 
     public static double[] berekenDagOmzet(double[] omzet) {
-        double[] temp = new double[7];
-        for(int i = 0; i < 7; i++) {
+        double[] temp = new double[DAYSINWEEK];
 
+        for(int i = 0; i < DAYSINWEEK; i++) {
             int j = 0;
-            while ( ... ) {
-                temp[i] += omzet[i + 7 * j];
-
-                // omitted
-
+            int counter = i + DAYSINWEEK * j;
+            while(counter < omzet.length) {
+                temp[i] += omzet[i + DAYSINWEEK * j];
+                j++;
+                counter = i + DAYSINWEEK * j;
             }
         }
         return temp;

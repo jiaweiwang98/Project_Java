@@ -1,15 +1,15 @@
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class KassaRij {
-    
-private LinkedList<Dienblad> dienblad;
+
+    private LinkedList<Dienblad> kassaRij;
+
 
     /**
      * Constructor
      */
     public KassaRij() {
-        dienblad = new LinkedList<>();
+        kassaRij = new LinkedList<>();
     }
 
     /**
@@ -18,7 +18,7 @@ private LinkedList<Dienblad> dienblad;
      * @param klant
      */
     public void sluitAchteraan(Dienblad klant) {
-        dienblad.add(klant);
+        kassaRij.add(klant);
     }
 
     /**
@@ -28,10 +28,10 @@ private LinkedList<Dienblad> dienblad;
      * @return Eerste klant in de rij of null
      */
     public Dienblad eerstePersoonInRij() {
-        if(dienblad.isEmpty()){
+        if (kassaRij.isEmpty()) {
             return null;
-        }else{
-            return dienblad.remove(0);
+        } else {
+            return kassaRij.remove(0);
         }
     }
 
@@ -41,10 +41,6 @@ private LinkedList<Dienblad> dienblad;
      * @return Of er wel of geen rij bestaat
      */
     public boolean isErEenRij() {
-        if(dienblad.isEmpty()){
-            return false;
-        }else{
-            return true;
-        }
+        return (kassaRij.size() > 0);
     }
 }

@@ -5,6 +5,7 @@ public class Artikel {
     private String naam;
     private double verkoopPrijs;
     private Persoon persoon;
+
     /**
      * De contructor van Artikel
      * @param naam naam van artikel
@@ -20,6 +21,8 @@ public class Artikel {
         this.naam ="";
         this.verkoopPrijs = 0;
     }
+
+
 
     @Override
     public String toString() {
