@@ -2,6 +2,10 @@ public class Administratie {
 
     private static final int DAYSINWEEK = 7 ;
 
+    //private contructor, prevent initiatie buiten het object
+    private Administratie(){
+    }
+
     /**
      * Deze methode berekent van de int array aantal de gemiddelde waarde
      *
@@ -23,7 +27,7 @@ public class Administratie {
      * @param omzet
      * @return het gemiddelde
      */
-    public double[] berekenGemiddeldeOmzet(double[] omzet) {
+    public static double[] berekenGemiddeldeOmzet(double[] omzet) {
         double[] toReturn;
         toReturn = berekenDagOmzet(omzet);
         int counter = 0;
