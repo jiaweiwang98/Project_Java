@@ -64,11 +64,7 @@ class Persoon {
         this.geslacht = geslacht;
     }
 
-    @Override
     public String toString() {
-        return "Persoon{" +
-                "geboortedatum=" + geboortedatum +
-                ", geslacht=" + geslacht +
-                '}';
+        return " ";
     }
 }

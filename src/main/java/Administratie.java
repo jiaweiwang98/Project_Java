@@ -1,6 +1,8 @@
+import java.util.ArrayList;
+
 public class Administratie {
 
-    private static final int DAYSINWEEK = 7 ;
+    private static final int DAYS_IN_WEEK = 7 ;
 
     //private contructor, prevent initiatie buiten het object
     private Administratie(){
@@ -17,8 +19,7 @@ public class Administratie {
         for (int amount : aantal) {
             toReturn += amount;
         }
-        toReturn = toReturn / aantal.length;
-        return toReturn;
+        return toReturn / aantal.length;
     }
 
     /**
@@ -27,16 +28,13 @@ public class Administratie {
      * @param omzet
      * @return het gemiddelde
      */
-    public static double[] berekenGemiddeldeOmzet(double[] omzet) {
-        double[] toReturn;
-        toReturn = berekenDagOmzet(omzet);
-        int counter = 0;
-        for (double amount: toReturn) {
-            toReturn[counter] = amount / Math.floor((double)omzet.length/7);
-            counter++;
-        }
+    public static double berekenGemiddeldeOmzet(double[] omzet) {
+        double toReturn = 0;
 
-        return toReturn;
+        for (double amount: omzet) {
+            toReturn += amount ;
+        }
+        return toReturn / omzet.length;
     }
 
     /**
@@ -47,15 +45,14 @@ public class Administratie {
      */
 
     public static double[] berekenDagOmzet(double[] omzet) {
-        double[] temp = new double[DAYSINWEEK];
+        double[] temp = new double[DAYS_IN_WEEK];
 
-        for(int i = 0; i < DAYSINWEEK; i++) {
+        for(int i = 0; i < DAYS_IN_WEEK; i++) {
+
             int j = 0;
-            int counter = i + DAYSINWEEK * j;
-            while(counter < omzet.length) {
-                temp[i] += omzet[i + DAYSINWEEK * j];
+            while(i + DAYS_IN_WEEK * j < omzet.length) {
+                temp[i] += omzet[i + DAYS_IN_WEEK * j];
                 j++;
-                counter = i + DAYSINWEEK * j;
             }
         }
         return temp;

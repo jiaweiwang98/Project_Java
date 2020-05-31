@@ -23,4 +23,9 @@ public class Docent extends Persoon {
     public void setAfdeling(String afdeling) {
         this.afdeling = afdeling;
     }
+
+    @Override
+    public String toString() {
+        return "Docent";
+    }
 }

@@ -1,19 +1,19 @@
 public class KantineMedewerker extends Persoon {
 
-    private String medewerkersNummer;
+    private int medewerkersNummer;
     private boolean kassaRechten;
 
-    public KantineMedewerker(int bsn, String voornaam, String achternaam, Datum geboortedatum, char geslacht, String medewerkersNummer, boolean kassaRechten) {
+    public KantineMedewerker(int bsn, String voornaam, String achternaam, Datum geboortedatum, char geslacht, int medewerkersNummer, boolean kassaRechten) {
         super(bsn, voornaam, achternaam, geboortedatum, geslacht);
         this.medewerkersNummer = medewerkersNummer;
         this.kassaRechten = kassaRechten;
     }
 
-    public String getMedewerkersNummer() {
+    public int getMedewerkersNummer() {
         return medewerkersNummer;
     }
 
-    public void setMedewerkersNummer(String medewerkersNummer) {
+    public void setMedewerkersNummer(int medewerkersNummer) {
         this.medewerkersNummer = medewerkersNummer;
     }
 
@@ -23,5 +23,10 @@ public class KantineMedewerker extends Persoon {
 
     public void setKassaRechten(boolean kassaRechten) {
         this.kassaRechten = kassaRechten;
+    }
+
+    @Override
+    public String toString() {
+        return "Kantinemedewerker";
     }
 }
