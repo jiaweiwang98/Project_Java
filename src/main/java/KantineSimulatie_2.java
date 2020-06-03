@@ -2,6 +2,9 @@ import java.util.*;
 
 class KantineSimulatie {
 
+    //Array van personen
+    public ArrayList<Persoon> personen = new ArrayList<>();
+
     // dagen
     public static final int DAGEN = 7;
 
@@ -128,6 +131,7 @@ class KantineSimulatie {
 
         // Omzet
         double[] omzet = new double[7];
+        int[] gemiddeldeArtikelen = new int[dagen+1];
 
         // for lus voor dagen
         for(int i = 0; i < dagen; i++) {
@@ -173,7 +177,6 @@ class KantineSimulatie {
             kantine.verwerkRijVoorKassa();
             // druk de dagtotalen af en hoeveel personen binnen
             // zijn gekomen
-
             System.out.println(" ");
             System.out.println("Dagtotalen van dag "  + (i + 1) + ": ");
             System.out.println("---------------------------------");
@@ -185,6 +188,9 @@ class KantineSimulatie {
             //Omzet
             omzet[i] = kantine.getKassa().hoeveelheidGeldInKassa();
 
+            //Artikelen
+            gemiddeldeArtikelen[i] = kantine.getAantalArtikelen();
+
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
         }
@@ -193,7 +199,7 @@ class KantineSimulatie {
         System.out.println(" ");
         System.out.println("Administratie");
         System.out.println("---------------------------------");
-        //System.out.println("Gemiddelde aantal: " + Administratie.berekenGemiddeldAantal());
+        System.out.println("Gemiddelde aantal: " + Administratie.berekenGemiddeldAantal(gemiddeldeArtikelen));
         System.out.println("Gemiddelde omzet: €" + (float)Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
         System.out.println("Omzet per dag van de week:");
         double[] temp = Administratie.berekenDagOmzet(omzet);
