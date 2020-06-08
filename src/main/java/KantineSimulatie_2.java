@@ -147,11 +147,14 @@ class KantineSimulatie {
                     int randomNummer = random.nextInt(100);
 
                     if(randomNummer == 0) {
-                        persoonKantine = new KantineMedewerker(987654321, "Mathilda", "van der Vaart", new Datum(9,1,1979), 'V', 4104, false);
+                        KantineMedewerker kantineMedewerker = new KantineMedewerker(987654321, "Mathilda", "van der Vaart", new Datum(9,1,1979), 'V', 4104, false);
+                        kantinebezoekers.add(kantineMedewerker);
                     } else if (randomNummer <= 10) {
-                        persoonKantine = new Docent(147258369, "Gregore", "Dijkstra", new Datum(24,8,1981), 'M', "DiGr", "Java");
+                        Docent docent = new Docent(147258369, "Gregore", "Dijkstra", new Datum(24,8,1981), 'M', "DiGr", "Java");
+                        kantinebezoekers.add(docent);
                     } else {
-                        persoonKantine = new Student(123456789, "Kayla", "Chu", new Datum(16,03,2000), 'V', "405455", "NSE");
+                        Student student = new Student(123456789, "Kayla", "Chu", new Datum(16,03,2000), 'V', "405455", "NSE");
+                        kantinebezoekers.add(student);
                     }
 
                 Dienblad dienbladVanPersoon = new Dienblad(kantinebezoekers.get(j));
