@@ -14,7 +14,7 @@ public class Administratie {
      * @param aantal
      * @return het gemiddelde
      */
-    public double berekenGemiddeldAantal(int[] aantal) {
+    public static double berekenGemiddeldAantal(int[] aantal) {
         double toReturn = 0;
         for (int amount : aantal) {
             toReturn += amount;
