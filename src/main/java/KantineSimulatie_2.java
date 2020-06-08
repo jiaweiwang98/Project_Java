@@ -2,6 +2,9 @@ import java.util.*;
 
 class KantineSimulatie {
 
+    //Array van personen
+    ArrayList<Persoon> kantinebezoekers;
+
     // dagen
     public static final int DAGEN = 7;
 
@@ -40,8 +43,6 @@ class KantineSimulatie {
     private int aantalStudenten = 89;
     private int aantalDocenten= 10;
     private int aantalKantineMedewerkers= 1;
-
-    ArrayList<Persoon> kantinebezoekers;
 
     /**
      * Constructor
@@ -138,7 +139,7 @@ class KantineSimulatie {
             // bedenk hoeveel personen vandaag binnen lopen
             int aantalpersonen = aantalStudenten + aantalKantineMedewerkers + aantalDocenten ;
             kantinebezoekers = new ArrayList<>();
-
+            
             // laat de personen maar komen...
                 for (int j = 0; j < aantalpersonen; j++) {
 
@@ -146,17 +147,14 @@ class KantineSimulatie {
                     int randomNummer = random.nextInt(100);
 
                     if(randomNummer == 0) {
-                        KantineMedewerker kantinemedewerker = new KantineMedewerker(987654321, "Mathilda", "van der Vaart", new Datum(9,1,1979), 'V', 4104, false);
-                        kantinebezoekers.add(kantinemedewerker);
+                        persoonKantine = new KantineMedewerker(987654321, "Mathilda", "van der Vaart", new Datum(9,1,1979), 'V', 4104, false);
                     } else if (randomNummer <= 10) {
-                        Docent docent = new Docent(147258369, "Gregore", "Dijkstra", new Datum(24,8,1981), 'M', "DiGr", "Java");
-                        kantinebezoekers.add(docent);
+                        persoonKantine = new Docent(147258369, "Gregore", "Dijkstra", new Datum(24,8,1981), 'M', "DiGr", "Java");
                     } else {
-                        Student student = new Student(123456789, "Kayla", "Chu", new Datum(16,03,2000), 'V', "405455", "NSE");
-                        kantinebezoekers.add(student);
+                        persoonKantine = new Student(123456789, "Kayla", "Chu", new Datum(16,03,2000), 'V', "405455", "NSE");
                     }
 
-                    Dienblad dienbladVanPersoon = new Dienblad(kantinebezoekers.get(j));
+                Dienblad dienbladVanPersoon = new Dienblad(kantinebezoekers.get(j));
 
                 // en bedenk hoeveel artikelen worden gepakt
                 int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
@@ -179,7 +177,6 @@ class KantineSimulatie {
             kantine.verwerkRijVoorKassa();
             // druk de dagtotalen af en hoeveel personen binnen
             // zijn gekomen
-
             System.out.println(" ");
             System.out.println("Dagtotalen van dag "  + (i + 1) + ": ");
             System.out.println("---------------------------------");
@@ -190,6 +187,8 @@ class KantineSimulatie {
 
             //Omzet
             omzet[i] = kantine.getKassa().hoeveelheidGeldInKassa();
+            
+            //Artikelen
             vertkochtAantalArtikelen[i] = kantine.getKassa().aantalArtikelen();
 
             // reset de kassa voor de volgende dag
@@ -233,3 +232,4 @@ class KantineSimulatie {
         System.out.println("Gemiddelde omzet: €" + (float)Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
     }
 }
+
