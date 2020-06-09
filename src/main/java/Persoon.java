@@ -6,6 +6,7 @@ class Persoon {
     private String achternaam;
     private Datum geboortedatum;
     private char geslacht;
+    private Betaalwijze betaalwijze;
 
     // constructor
     public Persoon(int bsn, String voornaam, String achternaam, Datum geboortedatum, char geslacht) {
@@ -67,4 +68,13 @@ class Persoon {
     public String toString() {
         return " ";
     }
+
+    public Betaalwijze getBetaalwijze() {
+        return betaalwijze;
+    }
+
+    public void setBetaalwijze(Betaalwijze betaalwijze) {
+        this.betaalwijze = betaalwijze;
+    }
+
 }
