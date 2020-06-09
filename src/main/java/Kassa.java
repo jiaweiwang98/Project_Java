@@ -23,7 +23,15 @@ public class Kassa {
     public void rekenAf(Dienblad klant) {
         Iterator<Artikel> it = klant.getArtikelIterator();
         while (it.hasNext()) {
-            this.hoeveelheidGeldInKassa += it.next().getVerkoopPrijs();
+
+            double prijs = it.next().getVerkoopPrijs();
+
+            try {
+                klant.getKlant().getBetaalwijze().betaal(prijs);
+                this.hoeveelheidGeldInKassa += prijs;
+            } catch (TeWeinigGeldException e) {
+                System.out.println(klant.getKlant().getVoornaam() + " heeft te weinig geld!");
+            }
             this.artikelen++;
         }
     }

@@ -21,5 +21,7 @@ public class Pinpas extends Betaalwijze {
             throw new TeWeinigGeldException("Betaling is mislukt, onvoldoende saldo");
         else if(saldo >= tebetalen)
             saldo = saldo - tebetalen;
+        else
+            throw new TeWeinigGeldException("Betaling is mislukt"); // er is iets anders fout gegaan.
     }
 }

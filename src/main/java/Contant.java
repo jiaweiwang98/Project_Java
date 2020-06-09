@@ -8,6 +8,8 @@ public class Contant extends Betaalwijze {
 
         else if(saldo < tebetalen)
             throw new TeWeinigGeldException("Contant betalen niet gelukt, te weinig geld");
+        else
+            throw new TeWeinigGeldException("Betaling is mislukt"); // er is iets anders fout gegaan.
     }
 }
 

@@ -3,7 +3,7 @@ import java.util.*;
 class KantineSimulatie {
 
     //Array van personen
-    ArrayList<Persoon> kantinebezoekers;
+    ArrayList<Persoon> kantinebezoekers = new ArrayList<>();;
 
     // dagen
     public static final int DAGEN = 7;
@@ -137,8 +137,8 @@ class KantineSimulatie {
         for(int i = 0; i < dagen; i++) {
 
             // bedenk hoeveel personen vandaag binnen lopen
-            int aantalpersonen = aantalStudenten + aantalKantineMedewerkers + aantalDocenten ;
-            kantinebezoekers = new ArrayList<>();
+            int aantalpersonen = getRandomValue(MIN_PERSONEN_PER_DAG,MAX_PERSONEN_PER_DAG);
+
             
             // laat de personen maar komen...
                 for (int j = 0; j < aantalpersonen; j++) {
@@ -157,6 +157,7 @@ class KantineSimulatie {
                         kantinebezoekers.add(student);
                     }
 
+
                 Dienblad dienbladVanPersoon = new Dienblad(kantinebezoekers.get(j));
 
                 // en bedenk hoeveel artikelen worden gepakt
@@ -174,6 +175,13 @@ class KantineSimulatie {
                 // artikelen, sluit aan
                 kantine.loopPakSluitAan(dienbladVanPersoon, artikelen);
                     System.out.println(kantinebezoekers.get(j).toString());
+                // betaalwijze
+                 if(random.nextInt(1) == 0) {
+                     kantinebezoekers.get(j).setBetaalwijze(new Contant());
+                 } else {
+                     kantinebezoekers.get(j).setBetaalwijze(new Pinpas());
+                 }
+                 kantinebezoekers.get(j).getBetaalwijze().setSaldo(random.nextInt(500));
             }
 
             // verwerk rij voor de kassa
