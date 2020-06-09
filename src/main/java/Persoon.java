@@ -7,6 +7,7 @@ class Persoon {
     private Datum geboortedatum;
     private char geslacht;
     private Betaalwijze betaalwijze;
+    private Dienblad dienblad;
 
     // constructor
     public Persoon(int bsn, String voornaam, String achternaam, Datum geboortedatum, char geslacht) {
@@ -45,6 +46,8 @@ class Persoon {
         return achternaam;
     }
 
+    public String getVolledigeNaam() { return voornaam +" "+achternaam; }
+
     public void setAchternaam(String achternaam) {
         this.achternaam = achternaam;
     }
@@ -77,4 +80,9 @@ class Persoon {
         this.betaalwijze = betaalwijze;
     }
 
+    public Dienblad getDienblad() { return dienblad; }
+
+    public void pakDienblad(Dienblad dienblad) { if (dienblad != null) { this.dienblad = dienblad; }
+
+    }
 }
