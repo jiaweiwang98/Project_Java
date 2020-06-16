@@ -1,4 +1,4 @@
-public class TeWeinigGeldException extends Throwable {
+public class TeWeinigGeldException extends Exception {
 
     public TeWeinigGeldException(){ }
 
@@ -7,4 +7,5 @@ public class TeWeinigGeldException extends Throwable {
     public TeWeinigGeldException(String message) {
 
     }
+
 }

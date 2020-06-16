@@ -8,6 +8,11 @@ public class Docent extends Persoon implements KortingskaartHouder {
         this.afdeling = afdeling;
     }
 
+    public Docent() {
+        afkorting = "JWW";
+        afdeling = "NSE";
+    }
+
     public String getAfkorting() {
         return afkorting;
     }

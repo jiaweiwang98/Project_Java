@@ -1,15 +1,43 @@
-# build output
-target/
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# IDE
-.vscode/
-.idea/
+# compiled output
+/dist
+/tmp
+/out-tsc
+/bin
+/target
+
+# dependencies
+/node_modules
+/lib
+
+# profiling files
+chrome-profiler-events.json
+speed-measure-plugin.json
+
+# IDEs and editors
+/.idea
+.project
+.c9/
 *.launch
 *.sublime-workspace
 *.iml
 *.swp
-.history/
 
-# macOS junk
+# IDE - VSCode
+.vscode/
+.history/*
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
 .DS_Store
 Thumbs.db

@@ -44,8 +44,9 @@ public class Kassa {
                     tempKorting = prijs * kortingsPercentage;
                     if(kaartHouder.heeftMaximum())
                         maxKorting = kaartHouder.geefMaximum();
+                    // korting controleern
                 }
-
+                //prijs  + korting betalen
                 if(maxKorting == -1){
                     klant.getKlant().getBetaalwijze().betaal(prijs - tempKorting);
                     this.hoeveelheidGeldInKassa += prijs - tempKorting;

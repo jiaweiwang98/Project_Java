@@ -44,9 +44,17 @@ public class Kantine {
     /**
      * Deze methode handelt de rij voor de kassa af.
      */
-    public void verwerkRijVoorKassa() {
+    public void verwerkRijVoorKassa() throws TeWeinigGeldException {
         while (kassarij.isErEenRij()) {
             kassa.rekenAf(kassarij.eerstePersoonInRij());
         }
+    }
+    /**z
+     * Deze methode geeft het aantal gepasseerde artikelen.
+     *
+     * @return Het aantal gepasseerde artikelen.
+     */
+    public int getAantalArtikelen() {
+        return kassa.aantalArtikelen();
     }
 }

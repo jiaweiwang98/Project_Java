@@ -1,6 +1,13 @@
 import java.util.*;
+import javax.persistence.Persistence;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 class KantineSimulatie {
+    // Create an EntityManagerFactory when you start the application.
+    private static final EntityManagerFactory ENTITY_MANAGER_FACTORY =
+            Persistence.createEntityManagerFactory("KantineSimulatie");
+    private EntityManager manager;
 
     //Array van personen
     ArrayList<Persoon> kantinebezoekers = new ArrayList<>();;
@@ -61,7 +68,7 @@ class KantineSimulatie {
     /**
      * Start een simulatie
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TeWeinigGeldException {
         int dagen;
 
         if (args.length == 0) {
@@ -127,7 +134,10 @@ class KantineSimulatie {
      *
      * @param dagen
      */
-    public void simuleer(int dagen) {
+    public void simuleer(int dagen) throws TeWeinigGeldException {
+
+        // Create the manager
+        manager = ENTITY_MANAGER_FACTORY.createEntityManager();
 
         // Omzet
         double[] omzet = new double[dagen];

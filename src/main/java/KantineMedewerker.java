@@ -9,6 +9,11 @@ public class KantineMedewerker extends Persoon implements KortingskaartHouder {
         this.kassaRechten = kassaRechten;
     }
 
+    public KantineMedewerker() {
+        medewerkersNummer = 2;
+        kassaRechten = false;
+    }
+
     public int getMedewerkersNummer() {
         return medewerkersNummer;
     }
