@@ -2,7 +2,7 @@ import java.util.*;
 
 public class KantineAanbod {
     // interne opslag voorraad
-    private HashMap<String, ArrayList<Artikel>> aanbod;
+    protected HashMap<String, ArrayList<Artikel>> aanbod;
     private HashMap<String, Integer> startVoorraad;
     private HashMap<String, Double> prijzen;
 
@@ -18,7 +18,7 @@ public class KantineAanbod {
         for (int i = 0; i < artikelnaam.length; i++) {
             ArrayList<Artikel> artikelen = new ArrayList<Artikel>();
             for (int j = 0; j < hoeveelheid[i]; j++) {
-                artikelen.add(new Artikel(artikelnaam[i], prijs[i]);
+                artikelen.add(new Artikel(artikelnaam[i], prijs[i]));
             }
             startVoorraad.put(artikelnaam[i], hoeveelheid[i]);
             prijzen.put(artikelnaam[i], prijs[i]);
@@ -41,7 +41,7 @@ public class KantineAanbod {
      * Private methode om de lijst van artikelen te krijgen op basis van de naam van het artikel.
      * Retourneert null als artikel niet bestaat.
      */
-    private ArrayList<Artikel> getArrayList(String productnaam) {
+    protected ArrayList<Artikel> getArrayList(String productnaam) {
         return aanbod.get(productnaam);
     }
 

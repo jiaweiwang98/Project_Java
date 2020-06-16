@@ -9,10 +9,7 @@ class KantineSimulatie {
             Persistence.createEntityManagerFactory("KantineSimulatie");
     private EntityManager manager;
 
-    //Array van personen
-    ArrayList<Persoon> kantinebezoekers = new ArrayList<>();;
-
-    // dagen
+      // dagen
     public static final int DAGEN = 7;
 
     // kantine
@@ -68,7 +65,7 @@ class KantineSimulatie {
     /**
      * Start een simulatie
      */
-    public static void main(String[] args) throws TeWeinigGeldException {
+    public static void main(String[] args) {
         int dagen;
 
         if (args.length == 0) {
@@ -79,6 +76,31 @@ class KantineSimulatie {
 
         KantineSimulatie kantineSimulatie = new KantineSimulatie();
         kantineSimulatie.simuleer(dagen);
+
+
+    }
+
+    private void genereerDagaanbieding() {
+
+        // willekeurig aantal artikelen die dagkorting krijgen
+        int r = getRandomValue(1, 2);
+        System.out.println("Vandaag hebben: " + r + " artikelen kortings.");
+        Artikel artikel;
+        // for loop om artikelen korting te geven
+            for (int j = 0; j < r; j++) {
+                int getal = getRandomValue(0, artikelnamen.length - 1);
+                //int count = 0;
+                artikel = kantineaanbod.getArtikel(artikelnamen[getal]);
+                artikel.setKorting(artikel.getVerkoopPrijs() * 0.2);
+                //System.out.println(artikel.getNaam() + " heeft " + artikel.getKorting() + " korting");
+                ArrayList<Artikel> dagAanbieding = new ArrayList<>();
+                for (int i = 0; i < kantineaanbod.getArrayList(artikelnamen[getal]).size(); i++) {
+                    dagAanbieding.add(artikel);
+                    //count++;
+                }
+                kantineaanbod.aanbod.put(artikelnamen[getal], dagAanbieding);
+                //System.out.println(count + " artikelen toegevoegd");
+            }
     }
 
     /**
@@ -134,11 +156,8 @@ class KantineSimulatie {
      *
      * @param dagen
      */
-    public void simuleer(int dagen) throws TeWeinigGeldException {
-
-        // Create the manager
+    public void simuleer(int dagen) {
         manager = ENTITY_MANAGER_FACTORY.createEntityManager();
-
         // Omzet
         double[] omzet = new double[dagen];
         int[] vertkochtAantalArtikelen = new int[dagen];
@@ -147,7 +166,9 @@ class KantineSimulatie {
         for(int i = 0; i < dagen; i++) {
 
             // bedenk hoeveel personen vandaag binnen lopen
+            genereerDagaanbieding();
             int aantalpersonen = getRandomValue(MIN_PERSONEN_PER_DAG,MAX_PERSONEN_PER_DAG);
+            Persoon kantinebezoeker;
 
             
             // laat de personen maar komen...
@@ -157,18 +178,15 @@ class KantineSimulatie {
                     int randomNummer = random.nextInt(100);
 
                     if(randomNummer == 0) {
-                        KantineMedewerker kantineMedewerker = new KantineMedewerker(987654321, "Mathilda", "van der Vaart", new Datum(9,1,1979), 'V', 4104, false);
-                        kantinebezoekers.add(kantineMedewerker);
+                        kantinebezoeker = new KantineMedewerker(987654321, "Mathilda", "van der Vaart", new Datum(9,1,1979), 'V', 4104, false);
                     } else if (randomNummer <= 10) {
-                        Docent docent = new Docent(147258369, "Gregore", "Dijkstra", new Datum(24,8,1981), 'M', "DiGr", "Java");
-                        kantinebezoekers.add(docent);
+                        kantinebezoeker  = new Docent(147258369, "Gregore", "Dijkstra", new Datum(24,8,1981), 'M', "DiGr", "Java");
                     } else {
-                        Student student = new Student(123456789, "Kayla", "Chu", new Datum(16,03,2000), 'V', "405455", "NSE");
-                        kantinebezoekers.add(student);
+                        kantinebezoeker  = new Student(123456789, "Kayla", "Chu", new Datum(16,03,2000), 'V', "405455", "NSE");
                     }
 
 
-                Dienblad dienbladVanPersoon = new Dienblad(kantinebezoekers.get(j));
+                Dienblad dienbladVanPersoon = new Dienblad(kantinebezoeker);
 
                 // en bedenk hoeveel artikelen worden gepakt
                 int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
@@ -184,14 +202,14 @@ class KantineSimulatie {
                 // loop de kantine binnen, pak de gewenste
                 // artikelen, sluit aan
                 kantine.loopPakSluitAan(dienbladVanPersoon, artikelen);
-                    System.out.println(kantinebezoekers.get(j).toString());
+                    System.out.println(dienbladVanPersoon.getKlant().toString());
                 // betaalwijze
                  if(random.nextInt(1) == 0) {
-                     kantinebezoekers.get(j).setBetaalwijze(new Contant());
+                     dienbladVanPersoon.getKlant().setBetaalwijze(new Contant());
                  } else {
-                     kantinebezoekers.get(j).setBetaalwijze(new Pinpas());
+                     dienbladVanPersoon.getKlant().setBetaalwijze(new Pinpas());
                  }
-                 kantinebezoekers.get(j).getBetaalwijze().setSaldo(random.nextInt(500));
+                    dienbladVanPersoon.getKlant().getBetaalwijze().setSaldo(random.nextInt(500));
             }
 
             // verwerk rij voor de kassa
@@ -247,10 +265,14 @@ class KantineSimulatie {
                     dag = "zondag";
                 break;
             }
-            System.out.println("    " + dag + " €" + (float)Math.round(Administratie.berekenDagOmzet(omzet)[i] * 100) / 100);
+            System.out.println("    " + dag + "  \t €" + (float)Math.round(Administratie.berekenDagOmzet(omzet)[i] * 100) / 100);
         }
         System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(vertkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float)Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
+
+        manager.close();
+        ENTITY_MANAGER_FACTORY.close();
     }
+
 }
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 public class Artikel {
     private String naam;
     private double verkoopPrijs;
-    private Persoon persoon;
     private double korting;
 
 
@@ -14,12 +13,18 @@ public class Artikel {
      * @param verkoopPrijs verkoop prijs van het artikel
      */
     public Artikel(String naam, double verkoopPrijs, double korting) {
-
         this.naam = naam;
         this.verkoopPrijs = verkoopPrijs;
         this.korting = korting;
 
     }
+
+    public Artikel(String naam, double verkoopPrijs) {
+        this.naam = naam;
+        this.verkoopPrijs = verkoopPrijs;
+
+    }
+
 
     public Artikel() {
         this.naam ="";
@@ -27,13 +32,7 @@ public class Artikel {
         this.korting = 0;
     }
 
-    public double getKorting() {
-        return korting;
-    }
 
-    public void setKorting(double korting) {
-        this.korting = korting;
-    }
 
     @Override
     public String toString() {
@@ -43,12 +42,7 @@ public class Artikel {
                 '}';
     }
 
-    public String getKlantVoornaam(){
-        return persoon.getVoornaam();
-    }
-    public String getKlantAchternaam(){
-        return persoon.getAchternaam();
-    }
+
 
     /**
      *
@@ -83,6 +77,11 @@ public class Artikel {
         this.verkoopPrijs = verkoopPrijs;
     }
 
+    public double getKorting() {
+        return korting;
+    }
 
-
+    public void setKorting(double korting) {
+        this.korting = korting;
+    }
 }

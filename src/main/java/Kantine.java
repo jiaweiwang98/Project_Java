@@ -44,7 +44,7 @@ public class Kantine {
     /**
      * Deze methode handelt de rij voor de kassa af.
      */
-    public void verwerkRijVoorKassa() throws TeWeinigGeldException {
+    public void verwerkRijVoorKassa() {
         while (kassarij.isErEenRij()) {
             kassa.rekenAf(kassarij.eerstePersoonInRij());
         }

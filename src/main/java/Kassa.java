@@ -5,6 +5,7 @@ public class Kassa {
     private int artikelen;
     private double hoeveelheidGeldInKassa;
     private KassaRij kassaRij;
+    private Artikel volgendArtikel;
     /**
      * Constructor
      */
@@ -22,65 +23,61 @@ public class Kassa {
      */
     public void rekenAf(Dienblad klant) {
         Iterator<Artikel> it = klant.getArtikelIterator();
-            double gekregenKorting = 0;
-            double kortingsPercentage = 0;
-            double maxKorting = -1;
-            double totalePrijs = 0; // Om mee te testen
-            double aantalArtikelen = 0; // Om mee te testen
+        double kortingsPercentage;
+        double kortingBedrag = 0;
 
-            while (it.hasNext()) {
+        double prijs = it.next().getVerkoopPrijs();
+        double korting;
 
-            double prijs = it.next().getVerkoopPrijs();
+        double totalePrijs = 0; // Om mee te testen
+        double aantalArtikelen = 0; // Om mee te testen
+
+        while (it.hasNext()) {
+            volgendArtikel = it.next();
+            if (volgendArtikel.getKorting() > 0) {
+                kortingBedrag += volgendArtikel.getKorting();
+            } else if (volgendArtikel.getKorting() == 0) {
+                prijs += volgendArtikel.getVerkoopPrijs();
+            }
 
             try {
 
                 //Kortingskaarthouder controle
-                double tempKorting = 0;
+                if (klant.getKlant() instanceof KortingskaartHouder) {
 
-
-                if(klant.getKlant() instanceof KortingskaartHouder){
-                    KortingskaartHouder kaartHouder = ((KortingskaartHouder)klant.getKlant());
+                    KortingskaartHouder kaartHouder = ((KortingskaartHouder) klant.getKlant());
                     kortingsPercentage = kaartHouder.geefKortingsPercentage();
-                    tempKorting = prijs * kortingsPercentage;
-                    if(kaartHouder.heeftMaximum())
-                        maxKorting = kaartHouder.geefMaximum();
-                    // korting controleern
-                }
-                //prijs  + korting betalen
-                if(maxKorting == -1){
-                    klant.getKlant().getBetaalwijze().betaal(prijs - tempKorting);
-                    this.hoeveelheidGeldInKassa += prijs - tempKorting;
-                } else {
-                        if(gekregenKorting < maxKorting) {
-                            if (gekregenKorting + tempKorting > maxKorting) {
-                                tempKorting = maxKorting - gekregenKorting;
-                                gekregenKorting = maxKorting;
-                                klant.getKlant().getBetaalwijze().betaal(prijs - tempKorting);
-                                this.hoeveelheidGeldInKassa += prijs - tempKorting;
-                            } else {
-                                gekregenKorting += tempKorting;
-                                klant.getKlant().getBetaalwijze().betaal(prijs - tempKorting);
-                                this.hoeveelheidGeldInKassa += prijs - tempKorting;
-                            }
+
+                    korting = prijs * kortingsPercentage;
+
+                    if (kaartHouder.heeftMaximum()) {
+                        double maxKorting = kaartHouder.geefMaximum();
+                        if (korting <= maxKorting) {
+                            prijs -= korting;
+                        } else {
+                            prijs -= maxKorting;
                         }
-                        else {
-                            klant.getKlant().getBetaalwijze().betaal(prijs);
-                            this.hoeveelheidGeldInKassa += prijs ;
-                        }
+                    } else
+                        prijs -= korting;
                 }
+
                 totalePrijs += prijs;
+                klant.getKlant().getBetaalwijze().betaal(prijs);
+                this.hoeveelheidGeldInKassa += prijs;
+
+            } catch (TeWeinigGeldException e) {
+                System.out.println(klant.getKlant().getVoornaam() + " heeft te weinig geld!");
             }
-            catch (TeWeinigGeldException e) {
-                    System.out.println(klant.getKlant().getVoornaam() + " heeft te weinig geld!");
-            }
-            aantalArtikelen++;
+            aantalArtikelen++; // om mee te oefenen
             this.artikelen++;
-        }
+
             //Even testen of het wel goed gaat...
-//        if(klant.getKlant() instanceof KortingskaartHouder){
+//       if(klant.getKlant() instanceof KortingskaartHouder){
 //            System.out.println(klant.getKlant().getVoornaam() + " heeft " + gekregenKorting + " gebruikt bij " + aantalArtikelen + " producten die totaal " + totalePrijs + " kosten. Klant had " + kortingsPercentage + " korting");
 //        }
+        }
     }
+
 
     /**
      * Geeft het aantal artikelen dat de kassa heeft gepasseerd, vanaf het moment dat de methode
