@@ -349,7 +349,7 @@ class KantineSimulatie {
      */
     public List<Object[]> getTotaleOmzetPerArtikelDB() {
         Query query = manager.createQuery(
-                "SELECT artikel.naam, SUM(artikel.verkoopPrijs - artikel.korting) FROM FactuurRegel GROUP BY artikel.naam"
+                "SELECT f.datum, fr.artikel.naam, SUM(fr.artikel.verkoopPrijs - fr.artikel.korting) FROM FactuurRegel fr JOIN fr.factuur f GROUP BY fr.artikel.naam, f.datum"
         );
         return query.getResultList();
     }
