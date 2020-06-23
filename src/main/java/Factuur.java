@@ -139,9 +139,9 @@ import java.util.Iterator;
                 + "UW VOORDEEL \t\t\t € " + Math.round(getKorting()* 100.0) / 100.0 + "\n"
                 + "Totaal \t\t\t\t\t € " + Math.round(getTotaal()* 100.0) / 100.0 + "\n"
                 + "- - - - - - - - - - - - - - - - - \n"
-                + "Datum  \t\t\t\t" +  datum + " \n"
+                + "Datum  \t\t\t\t " +  datum + " \n"
                 + klant.getKlant().toString() + " \n"
-                + "Betaalwijze \t" + klant.getKlant().getBetaalwijze()+ "\n"
+                + "Betaalwijze \t\t\t" + klant.getKlant().getBetaalwijze()+ "\n"
                 + "--------------------------------- \n"
                 + "\t  Bedankt en tot ziens!\t\n"
                 + " \n";

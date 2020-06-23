@@ -270,7 +270,7 @@ class KantineSimulatie {
         System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(verkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float) Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
         System.out.println("- - - - - - - - - - - - - - - - -");
-        System.out.println("Totale omzet en toegepaste korting: € ");totaleGemiddeldeOmzetKorting();
+        System.out.println("Totale omzet en toegepaste korting: €" + totaleGemiddeldeOmzet() + ", €" + totaleKorting());
         System.out.println("De gemiddelde omzet: €");
         for (Object[] factuur : getGemiddeldeOmzetKortingDB()) {
             System.out.println(Arrays.toString(factuur));
@@ -313,10 +313,14 @@ class KantineSimulatie {
     /**
      * Toon totale omzet uit database
      */
-    public void totaleGemiddeldeOmzetKorting(){
-        Query query = manager.createQuery("SELECT ROUND(SUM(totaal)), ROUND(SUM(korting)) FROM Factuur factuur");
-        List<Object[]> resultList = query.getResultList();
-        resultList.forEach(r -> System.out.println(Arrays.toString(r)));
+    public double totaleGemiddeldeOmzet(){
+        Query query = manager.createQuery("SELECT ROUND(SUM(totaal)) FROM Factuur factuur");
+        return (Double) query.getSingleResult();
+    }
+
+    public double totaleKorting(){
+        Query query = manager.createQuery("SELECT ROUND(SUM(korting)) FROM Factuur factuur");
+        return (Double) query.getSingleResult();
     }
 
     /**
