@@ -51,7 +51,7 @@ public class Dienblad extends Artikel {
     public double getTotaalPrijs() {
         double totaalprijs = 0;
         for(Artikel artikel : artikelen){
-                totaalprijs = getVerkoopPrijs()*getAantalArtikelen();
+            totaalprijs = getVerkoopPrijs()*getAantalArtikelen();
         }
         return totaalprijs;
     }
@@ -64,7 +64,6 @@ public class Dienblad extends Artikel {
         artikelIterator = artikelen.iterator();
         return artikelIterator;
     }
+
+
 }
-
-
-

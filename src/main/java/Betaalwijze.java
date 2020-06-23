@@ -16,5 +16,17 @@ public abstract class Betaalwijze {
      * @return Boolean om te kijken of er voldoende saldo is
      */
     public abstract void betaal(double tebetalen) throws TeWeinigGeldException;
+    /**
+     * Publieke toString methode.
+     *
+     * @return contant, wanneer er een instantie van contant is, anders Pinpas.
+     */
+    public String toString() {
+        if (this instanceof Contant) {
+            return "Contant";
+        } else {
+            return "Pinpas";
+        }
+    }
 
 }
