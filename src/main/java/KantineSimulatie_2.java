@@ -201,7 +201,7 @@ class KantineSimulatie {
                 // loop de kantine binnen, pak de gewenste
                 // artikelen, sluit aan
                 kantine.loopPakSluitAan(dienbladVanPersoon, artikelen);
-                System.out.println(dienbladVanPersoon.getKlant().toString());
+                //System.out.println(dienbladVanPersoon.getKlant().toString());
                 // betaalwijze
                 if (random.nextInt(2) == 0) {
                     dienbladVanPersoon.getKlant().setBetaalwijze(new Contant());
@@ -276,11 +276,17 @@ class KantineSimulatie {
         System.out.println("De gemiddelde korting: " + getGemiddeldeKortingDB());
         System.out.println("- - - - - - - - - - - - - - - - -");
         System.out.println("Top 3 facturen: ");
+
         for (Object[] factuur : getDrieHoogsteFacturenDB()) {
             System.out.println(Arrays.toString(factuur));
         }
         System.out.println(" ");
         System.out.println("Totale omzet per artikel: ");
+        for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
+            System.out.println(Arrays.toString(artikel));
+        }
+        System.out.println(" ");
+        System.out.println("\nDe totale omzet per artikel, per dag:");
         for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
             System.out.println(Arrays.toString(artikel));
         }
