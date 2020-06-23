@@ -78,10 +78,4 @@ class Persoon {
     public void setBetaalwijze(Betaalwijze betaalwijze) {
         this.betaalwijze = betaalwijze;
     }
-
-    public Dienblad getDienblad() { return dienblad; }
-
-    public void pakDienblad(Dienblad dienblad) { if (dienblad != null) { this.dienblad = dienblad; }
-
-    }
 }

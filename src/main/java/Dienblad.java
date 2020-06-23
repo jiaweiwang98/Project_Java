@@ -60,10 +60,6 @@ public class Dienblad extends Artikel {
         return klant;
     }
 
-    public void setKlant(Persoon klant) {
-        this.klant = klant;
-    }
-
     public Iterator<Artikel> getArtikelIterator() {
         artikelIterator = artikelen.iterator();
         return artikelIterator;

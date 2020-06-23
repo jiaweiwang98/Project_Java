@@ -1,7 +1,11 @@
+
+import org.hibernate.Session;
+
 import java.util.*;
 import javax.persistence.Persistence;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 
 class KantineSimulatie {
     // Create an EntityManagerFactory when you start the application.
@@ -53,7 +57,8 @@ class KantineSimulatie {
      *
      */
     public KantineSimulatie() {
-        kantine = new Kantine();
+        manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        kantine = new Kantine(manager);
         random = new Random();
         int[] hoeveelheden =
                 getRandomArray(AANTAL_ARTIKELEN, MIN_ARTIKELEN_PER_SOORT, MAX_ARTIKELEN_PER_SOORT);
@@ -76,15 +81,13 @@ class KantineSimulatie {
 
         KantineSimulatie kantineSimulatie = new KantineSimulatie();
         kantineSimulatie.simuleer(dagen);
-
-
     }
 
     private void genereerDagaanbieding() {
 
         // willekeurig aantal artikelen die dagkorting krijgen
         int r = getRandomValue(1, 2);
-        System.out.println("Vandaag hebben: " + r + " artikelen kortings.");
+        System.out.println("Vandaag hebben: " + r + " artikel(en) korting.");
         Artikel artikel;
         // for loop om artikelen korting te geven
             for (int j = 0; j < r; j++) {
@@ -220,7 +223,7 @@ class KantineSimulatie {
             System.out.println("Dagtotalen van dag "  + (i + 1) + ": ");
             System.out.println("---------------------------------");
             System.out.println("Aantal bediende personen: " +aantalpersonen);
-            System.out.println("Aantal verkochte artikelen: " + kantine.getKassa().aantalArtikelen());
+            System.out.println("Aantal verkochte artikelen: " + kantine.getKassa().aantalGescandeArtikelen());
             System.out.println("Hoeveelheid geld in kassa: €" + Math.round(kantine.getKassa().hoeveelheidGeldInKassa() * 100.0) / 100.0);
             System.out.println(" ");
 
@@ -228,7 +231,7 @@ class KantineSimulatie {
             omzet[i] = kantine.getKassa().hoeveelheidGeldInKassa();
             
             //Artikelen
-            vertkochtAantalArtikelen[i] = kantine.getKassa().aantalArtikelen();
+            vertkochtAantalArtikelen[i] = kantine.getKassa().aantalGescandeArtikelen();
 
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
@@ -269,9 +272,21 @@ class KantineSimulatie {
         }
         System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(vertkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float)Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
+        System.out.println("Totale omzet en toegepaste korting: " + totaleOmzetKortingDB());
 
         manager.close();
         ENTITY_MANAGER_FACTORY.close();
+    }
+
+    /**
+     * Totale omzet en toegepaste korting opvragen
+     * uit de database
+     */
+    public List<Object[]> totaleOmzetKortingDB() {
+        Query query = manager.createQuery("SELECT sum(totaal), sum(korting) FROM Factuur factuur");
+        List<Object[]> totaleOmzetKorting = query.getResultList();
+        //resultList.forEach(r -> System.out.println(Arrays.toString(r)));
+        return totaleOmzetKorting;
     }
 
 }

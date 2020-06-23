@@ -1,16 +1,21 @@
-import java.util.Iterator;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.time.LocalDate;
 
 public class Kassa {
 
-    private int artikelen;
+    private int aantalGescandeArtikelen;
     private double hoeveelheidGeldInKassa;
     private KassaRij kassaRij;
-    private Artikel volgendArtikel;
+    private double bedragVanKlant;
+    private EntityManager manager;
+
     /**
      * Constructor
      */
-    public Kassa(KassaRij kassarij) {
+    public Kassa(KassaRij kassarij, EntityManager manager) {
         this.kassaRij = kassarij;
+        this.manager = manager;
         resetKassa();
     }
 
@@ -21,72 +26,33 @@ public class Kassa {
      *
      * @param klant die moet afrekenen
      */
-    public void rekenAf(Dienblad klant) {
-        Iterator<Artikel> it = klant.getArtikelIterator();
-        double kortingsPercentage;
-        double kortingBedrag = 0;
+    public void rekenAf(Dienblad klant) throws TeWeinigGeldException{
 
-        double prijs = it.next().getVerkoopPrijs();
-        double korting;
-
-        double totalePrijs = 0; // Om mee te testen
-        double aantalArtikelen = 0; // Om mee te testen
-
-        while (it.hasNext()) {
-            volgendArtikel = it.next();
-            if (volgendArtikel.getKorting() > 0) {
-                kortingBedrag += volgendArtikel.getKorting();
-            } else if (volgendArtikel.getKorting() == 0) {
-                prijs += volgendArtikel.getVerkoopPrijs();
-            }
+            Factuur factuur = new Factuur(klant, LocalDate.now());
 
             try {
-
-                //Kortingskaarthouder controle
-                if (klant.getKlant() instanceof KortingskaartHouder) {
-
-                    KortingskaartHouder kaartHouder = ((KortingskaartHouder) klant.getKlant());
-                    kortingsPercentage = kaartHouder.geefKortingsPercentage();
-
-                    korting = prijs * kortingsPercentage;
-
-                    if (kaartHouder.heeftMaximum()) {
-                        double maxKorting = kaartHouder.geefMaximum();
-                        if (korting <= maxKorting) {
-                            prijs -= korting;
-                        } else {
-                            prijs -= maxKorting;
-                        }
-                    } else
-                        prijs -= korting;
-                }
-
-                totalePrijs += prijs;
-                klant.getKlant().getBetaalwijze().betaal(prijs);
-                this.hoeveelheidGeldInKassa += prijs;
+                klant.getKlant().getBetaalwijze().betaal(factuur.getTotaal());
+                this.hoeveelheidGeldInKassa += bedragVanKlant;
+                aantalGescandeArtikelen += factuur.getAantalArtikelen(); // Artikelen halen van de factuur
+                hoeveelheidGeldInKassa += factuur.getTotaal();
+                save(factuur);
 
             } catch (TeWeinigGeldException e) {
                 System.out.println(klant.getKlant().getVoornaam() + " heeft te weinig geld!");
+            } finally {
+                System.out.println(factuur.toString(klant));
             }
-            aantalArtikelen++; // om mee te oefenen
-            this.artikelen++;
-
-            //Even testen of het wel goed gaat...
-//       if(klant.getKlant() instanceof KortingskaartHouder){
-//            System.out.println(klant.getKlant().getVoornaam() + " heeft " + gekregenKorting + " gebruikt bij " + aantalArtikelen + " producten die totaal " + totalePrijs + " kosten. Klant had " + kortingsPercentage + " korting");
-//        }
-        }
     }
 
 
     /**
-     * Geeft het aantal artikelen dat de kassa heeft gepasseerd, vanaf het moment dat de methode
-     * resetWaarden is aangeroepen.
+     * Geeft de totaal aantal afgerekende artikelen terug
+     * afkomstig van de factuur.
      *
      * @return aantal artikelen
      */
-    public int aantalArtikelen() {
-        return this.artikelen;
+    public int aantalGescandeArtikelen() {
+        return aantalGescandeArtikelen; // artikelen afkomstig van de factuur!!
     }
 
     /**
@@ -104,7 +70,33 @@ public class Kassa {
      * kassa.
      */
     public void resetKassa() {
-        artikelen = 0;
+        aantalGescandeArtikelen = 0;
         hoeveelheidGeldInKassa = 0;
     }
+
+
+    /**
+     * Maakt een nieuwe factuur en slaat hem op in de databases
+     * (zie JPA voorbeeld)
+     *
+     * @param factuur
+     */
+    public void save(Factuur factuur) {
+
+        EntityTransaction transaction = null;
+        try {
+            // Get a transaction, sla de student gegevens op en commit de transactie
+            transaction = manager.getTransaction();
+            transaction.begin();
+            manager.persist(factuur);
+            transaction.commit();
+        } catch (Exception ex) {
+            // If there are any exceptions, roll back the changes
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+        }
+    }
+
 }
