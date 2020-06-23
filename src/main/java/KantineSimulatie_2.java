@@ -1,6 +1,3 @@
-
-import org.hibernate.Session;
-
 import java.util.*;
 import javax.persistence.Persistence;
 import javax.persistence.EntityManager;
@@ -273,9 +270,27 @@ class KantineSimulatie {
         System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(vertkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float) Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
         System.out.println("Totale omzet en toegepaste korting: " + getTotaleKortingDB());
+        System.out.println("De gemiddelde omzet: " +  gemiddeldeOmzet());
         System.out.println("De gemiddelde prijs: " + getAveragePrijs());
         System.out.println("De gemiddelde korting: " + getAverageKorting());
+        System.out.println("Top 3 facturen: ");
+        for (Object[] factuur : drieHoogsteFacturen()) {
+            System.out.println(Arrays.toString(factuur));
+        }
+        System.out.println("Totale omzet per artikel: ");
+        for (Object[] artikel : totaleOmzetPerArtikel()) {
+            System.out.println(Arrays.toString(artikel));
+        }
         System.out.println("Top 3 artikelen: ");
+        for (Object[] artikel : driePopulaireArtikelen()) {
+            System.out.println(Arrays.toString(artikel));
+        }
+        System.out.println("Top 3 artikelen met de hoogste omzet: ");
+        for (Object[] artikel : drieArtikelenMetHoogsteOmzet()) {
+            System.out.println(Arrays.toString(artikel));
+        }
+
+
 
         manager.close();
         ENTITY_MANAGER_FACTORY.close();
@@ -291,17 +306,17 @@ class KantineSimulatie {
                         Double.class).getResultList();
     }
 
-    /**
-     * Toon totale omzet uit database
-
-    public void hoogsteDrieFacturen(){
-        Query query = manager.createQuery("SELECT id, totaal from Factuur factuur ORDER by factuur.totaal DESC").setMaxResults(3);
-        List<Object[]> resultList = query.getResultList();
-
-        resultList.forEach(r -> System.out.println(Arrays.toString(r)));
-
-    }
+     /**
+     * Bereken gemiddelde omzet van alle facturen
+     * @return gemiddelde ozmet van alle facturen
      */
+    public double gemiddeldeOmzet() {
+        Query query = manager.createQuery(
+                "SELECT AVG(totaal - korting) FROM Factuur"
+        );
+        return (Double) query.getSingleResult();
+    }
+
     public List<Double> getAverageKorting() {
         return manager
                 .createQuery("SELECT AVG(korting) FROM  Factuur",
@@ -314,14 +329,50 @@ class KantineSimulatie {
                 .createQuery("SELECT AVG(totaal) FROM  Factuur",
                         Double.class).getResultList();
     }
+
+    /**
+     * Verzamelt de drie hoogste facturen
+     * @return de drie hoogste facturen
+     */
+    public List<Object[]> drieHoogsteFacturen() {
+        Query query = manager.createQuery(
+                "SELECT id, datum, korting, totaal FROM Factuur ORDER BY (totaal-korting) DESC"
+        );
+        query.setMaxResults(3);
+        return query.getResultList();
+    }
+    /**
+     * Verzamelt gegevens over de totale omzet per artikel
+     * @return de totale omzetten van de artikelen
+     */
+    public List<Object[]> totaleOmzetPerArtikel() {
+        Query query = manager.createQuery(
+                "SELECT artikel.naam, SUM(artikel.verkoopPrijs - artikel.korting) FROM FactuurRegel GROUP BY artikel.naam"
+        );
+        return query.getResultList();
+    }
     /**
      * Toon totale omzet uit database
-
-    public List<Artikel> getTopDrie() {
-        Session session = manager.unwrap(Session.class);
-       List<Artikel> populaireArtikelen =
-               (List<Artikel>) session.createQuery("SELECT artikel.naam, COUNT(artikel.naam) FROM FactuurRegel GROUP BY artikel.naam ORDER BY count(artikel.naam) DESC");
+     * @return
+     */
+    public List<Object[]> driePopulaireArtikelen() {
+        Query query = manager.createQuery(
+                "SELECT artikel.naam, COUNT(artikel.naam) FROM FactuurRegel GROUP BY artikel.naam ORDER BY count(artikel.naam) DESC"
+        );
+        query.setMaxResults(3);
+        return query.getResultList();
     }
-*/
+
+    /**
+     * Verzamelt gegevens over de artikelen met de hoogste omzet
+     * @return de drie artikelen met de hoogste omzet
+     */
+    public List<Object[]> drieArtikelenMetHoogsteOmzet() {
+        Query query = manager
+                .createQuery("SELECT artikel.naam, SUM(artikel.verkoopPrijs - artikel.korting) FROM FactuurRegel GROUP BY artikel.naam ORDER BY SUM(artikel.verkoopPrijs) DESC");
+        query.setMaxResults(3);
+        return query.getResultList();
+    }
+
 }
 
