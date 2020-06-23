@@ -269,29 +269,32 @@ class KantineSimulatie {
         }
         System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(vertkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float) Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
-        System.out.println("Totale omzet en toegepaste korting: " + getTotaleKortingDB());
-        System.out.println("De gemiddelde omzet: " +  gemiddeldeOmzet());
-        System.out.println("De gemiddelde prijs: " + getAveragePrijs());
-        System.out.println("De gemiddelde korting: " + getAverageKorting());
+        System.out.println("- - - - - - - - - - - - - - - - -");
+        System.out.println("Totale omzet en toegepaste korting: " + getTotaleOmzetKortingDB());
+        System.out.println("De gemiddelde omzet: " +  getGemiddeldeOmzetDB());
+        System.out.println("De gemiddelde prijs: " + getGemiddeldePrijsDB());
+        System.out.println("De gemiddelde korting: " + getGemiddeldeKortingDB());
+        System.out.println("- - - - - - - - - - - - - - - - -");
         System.out.println("Top 3 facturen: ");
-        for (Object[] factuur : drieHoogsteFacturen()) {
+        for (Object[] factuur : getDrieHoogsteFacturenDB()) {
             System.out.println(Arrays.toString(factuur));
         }
+        System.out.println(" ");
         System.out.println("Totale omzet per artikel: ");
-        for (Object[] artikel : totaleOmzetPerArtikel()) {
+        for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
             System.out.println(Arrays.toString(artikel));
         }
+        System.out.println(" ");
         System.out.println("Top 3 artikelen: ");
-        for (Object[] artikel : driePopulaireArtikelen()) {
+        for (Object[] artikel : getDriePopulaireArtikelenDB()) {
             System.out.println(Arrays.toString(artikel));
         }
+        System.out.println(" ");
         System.out.println("Top 3 artikelen met de hoogste omzet: ");
-        for (Object[] artikel : drieArtikelenMetHoogsteOmzet()) {
+        for (Object[] artikel : getDrieArtikelenMetHoogsteOmzetDB()) {
             System.out.println(Arrays.toString(artikel));
         }
-
-
-
+        System.out.println(" ");
         manager.close();
         ENTITY_MANAGER_FACTORY.close();
     }
@@ -300,44 +303,37 @@ class KantineSimulatie {
      * Totale omzet en toegepaste korting opvragen
      * uit de database
      */
-    public List<Double> getTotaleKortingDB() {
-        return manager
-                .createQuery("SELECT SUM(korting) FROM  Factuur",
-                        Double.class).getResultList();
+    public double getTotaleOmzetKortingDB() {
+        Query query = manager.createQuery("SELECT ROUND(SUM(korting)) FROM  Factuur");
+         return (Double)  query.getSingleResult();
     }
 
      /**
      * Bereken gemiddelde omzet van alle facturen
      * @return gemiddelde ozmet van alle facturen
      */
-    public double gemiddeldeOmzet() {
-        Query query = manager.createQuery(
-                "SELECT AVG(totaal - korting) FROM Factuur"
-        );
+    public double getGemiddeldeOmzetDB() {
+        Query query = manager.createQuery("SELECT ROUND(AVG(totaal - korting)) FROM Factuur");
         return (Double) query.getSingleResult();
     }
 
-    public List<Double> getAverageKorting() {
-        return manager
-                .createQuery("SELECT AVG(korting) FROM  Factuur",
-                        Double.class).getResultList();
-
+    public double getGemiddeldeKortingDB() {
+        Query query = manager.createQuery("SELECT ROUND(AVG(korting)) FROM  Factuur");
+        return (Double) query.getSingleResult();
     }
 
-    public List<Double> getAveragePrijs() {
-        return manager
-                .createQuery("SELECT AVG(totaal) FROM  Factuur",
-                        Double.class).getResultList();
+    public double getGemiddeldePrijsDB() {
+        Query query = manager.createQuery("SELECT ROUND(AVG(totaal)) FROM  Factuur");
+        return (Double) query.getSingleResult();
     }
 
     /**
      * Verzamelt de drie hoogste facturen
      * @return de drie hoogste facturen
      */
-    public List<Object[]> drieHoogsteFacturen() {
+    public List<Object[]> getDrieHoogsteFacturenDB() {
         Query query = manager.createQuery(
-                "SELECT id, datum, korting, totaal FROM Factuur ORDER BY (totaal-korting) DESC"
-        );
+                "SELECT id, datum, korting, totaal FROM Factuur ORDER BY (totaal-korting) DESC");
         query.setMaxResults(3);
         return query.getResultList();
     }
@@ -345,7 +341,7 @@ class KantineSimulatie {
      * Verzamelt gegevens over de totale omzet per artikel
      * @return de totale omzetten van de artikelen
      */
-    public List<Object[]> totaleOmzetPerArtikel() {
+    public List<Object[]> getTotaleOmzetPerArtikelDB() {
         Query query = manager.createQuery(
                 "SELECT artikel.naam, SUM(artikel.verkoopPrijs - artikel.korting) FROM FactuurRegel GROUP BY artikel.naam"
         );
@@ -355,7 +351,7 @@ class KantineSimulatie {
      * Toon totale omzet uit database
      * @return
      */
-    public List<Object[]> driePopulaireArtikelen() {
+    public List<Object[]> getDriePopulaireArtikelenDB() {
         Query query = manager.createQuery(
                 "SELECT artikel.naam, COUNT(artikel.naam) FROM FactuurRegel GROUP BY artikel.naam ORDER BY count(artikel.naam) DESC"
         );
@@ -365,9 +361,9 @@ class KantineSimulatie {
 
     /**
      * Verzamelt gegevens over de artikelen met de hoogste omzet
-     * @return de drie artikelen met de hoogste omzet
+     * @return de top drie artikelen met de hoogste omzet
      */
-    public List<Object[]> drieArtikelenMetHoogsteOmzet() {
+    public List<Object[]> getDrieArtikelenMetHoogsteOmzetDB() {
         Query query = manager
                 .createQuery("SELECT artikel.naam, SUM(artikel.verkoopPrijs - artikel.korting) FROM FactuurRegel GROUP BY artikel.naam ORDER BY SUM(artikel.verkoopPrijs) DESC");
         query.setMaxResults(3);
