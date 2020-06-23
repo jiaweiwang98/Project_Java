@@ -1,30 +1,38 @@
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
+
     @Entity
+    @Table(name = "FACTUUR")
     public class Factuur implements Serializable {
         @Id
         @Column(name = "ID", unique = true, nullable = false)
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
-        @Column(name = "DATUM")
+        @Column(name = "DATUM", nullable = false)
         private LocalDate datum;
-        @Column(name = "SUBTOTAAL")
+        @Column(name = "SUBTOTAAL", nullable = false)
         private double subtotaal;
-        @Column(name = "KORTING")
+        @Column(name = "KORTING", nullable = false)
         private double korting;
-        @Column(name = "TOTAAL")
+        @Column(name = "TOTAAL", nullable = false)
         private double totaal;
-        @Column(name = "AANTAL_ARTIKELEN")
+        @Column(name = "AANTAL_ARTIKELEN", nullable = false)
         private int artikelenOpDienblad;
 
-
+        @Column(name = "FACTUURREGEL", nullable = false)
+        @ElementCollection
+        @OneToMany(targetEntity = FactuurRegel.class, cascade = CascadeType.ALL)
+        private List<FactuurRegel> regels;
 
     public Factuur() {
         totaal = 0;
         korting = 0;
+        regels = new ArrayList<>();
     }
 
     public Factuur(Dienblad klant, LocalDate datum) {
@@ -62,6 +70,10 @@ import java.util.Iterator;
                 //Anders, wanneer de korting gelijk is aan 0.. dus geen korting, dan wordt het bedrag gevuld met de prijs van artikel
             else if (volgendeArtikel.getKorting() == 0)
                 bedragVanKlant += volgendeArtikel.getVerkoopPrijs();
+
+            //FactuurRegel
+            FactuurRegel factuurRegel = new FactuurRegel(this, volgendeArtikel);
+            regels.add(factuurRegel);
 
             //Totaal bedrag van alle artikelen (zonder korting)
             subtotaal += volgendeArtikel.getVerkoopPrijs();
@@ -121,22 +133,17 @@ import java.util.Iterator;
                 + "--------------------------------- \n"
                 + "AANTAL \t OMSCHRIJVING \t BEDRAG \n"
                 + "- - - - - - - - - - - - - - - - - \n"
-                //+ toStringFactuurRegel();
+                + regels.toString() + "\n"
                 + "- - - - - - - - - - - - - - - - - \n"
-                + artikelenOpDienblad + "\t\t  SUBTOTAAL \t € " + rondAf(subtotaal) + "\n"
-                + "UW VOORDEEL \t\t\t € " + rondAf(getKorting()) + "\n"
-                + "Totaal \t\t\t\t\t € " + rondAf(getTotaal()) + "\n"
+                + artikelenOpDienblad + "\t\t  SUBTOTAAL \t € " + Math.round(subtotaal* 100.0) / 100.0 + "\n"
+                + "UW VOORDEEL \t\t\t € " + Math.round(getKorting()* 100.0) / 100.0 + "\n"
+                + "Totaal \t\t\t\t\t € " + Math.round(getTotaal()* 100.0) / 100.0 + "\n"
                 + "- - - - - - - - - - - - - - - - - \n"
                 + "Datum  \t\t\t\t" +  datum + " \n"
                 + klant.getKlant().toString() + " \n"
                 + "Betaalwijze \t" + klant.getKlant().getBetaalwijze()+ "\n"
                 + "--------------------------------- \n"
-                + "\t  Bedankt en tot ziens!\t"
-                + " ";
+                + "\t  Bedankt en tot ziens!\t\n"
+                + " \n";
     }
-
-        private double rondAf(double getal) {
-            return Math.round(getal * 100.0) / 100.0;
-        }
-
 }

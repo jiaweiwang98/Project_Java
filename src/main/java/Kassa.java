@@ -95,7 +95,8 @@ public class Kassa {
             if (transaction != null) {
                 transaction.rollback();
             }
-            ex.printStackTrace();
+            //ex.getMessage();
+            //ex.printStackTrace();
         }
     }
 

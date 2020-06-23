@@ -1,11 +1,12 @@
+import javax.persistence.Embeddable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+@Embeddable
 public class Artikel {
     private String naam;
     private double verkoopPrijs;
     private double korting;
-
 
     /**
      * De contructor van Artikel
