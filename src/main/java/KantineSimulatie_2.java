@@ -159,7 +159,7 @@ class KantineSimulatie {
         manager = ENTITY_MANAGER_FACTORY.createEntityManager();
         // Omzet
         double[] omzet = new double[dagen];
-        int[] vertkochtAantalArtikelen = new int[dagen];
+        int[] verkochtAantalArtikelen = new int[dagen];
 
         // for lus voor dagen
         for (int i = 0; i < dagen; i++) {
@@ -228,7 +228,7 @@ class KantineSimulatie {
             omzet[i] = kantine.getKassa().hoeveelheidGeldInKassa();
 
             //Artikelen
-            vertkochtAantalArtikelen[i] = kantine.getKassa().aantalGescandeArtikelen();
+            verkochtAantalArtikelen[i] = kantine.getKassa().aantalGescandeArtikelen();
 
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
@@ -267,16 +267,16 @@ class KantineSimulatie {
             }
             System.out.println("    " + dag + "  \t €" + (float) Math.round(Administratie.berekenDagOmzet(omzet)[i] * 100) / 100);
         }
-        System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(vertkochtAantalArtikelen) * 100) / 100);
+        System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(verkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float) Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
         System.out.println("- - - - - - - - - - - - - - - - -");
-        System.out.println("Totale omzet en toegepaste korting: " + getTotaleOmzetKortingDB());
-        System.out.println("De gemiddelde omzet: " +  getGemiddeldeOmzetDB());
-        System.out.println("De gemiddelde prijs: " + getGemiddeldePrijsDB());
-        System.out.println("De gemiddelde korting: " + getGemiddeldeKortingDB());
+        System.out.println("Totale omzet en toegepaste korting: € ");totaleGemiddeldeOmzetKorting();
+        System.out.println("De gemiddelde omzet: €");
+        for (Object[] factuur : getGemiddeldeOmzetKortingDB()) {
+            System.out.println(Arrays.toString(factuur));
+        }
         System.out.println("- - - - - - - - - - - - - - - - -");
         System.out.println("Top 3 facturen: ");
-
         for (Object[] factuur : getDrieHoogsteFacturenDB()) {
             System.out.println(Arrays.toString(factuur));
         }
@@ -305,32 +305,27 @@ class KantineSimulatie {
         ENTITY_MANAGER_FACTORY.close();
     }
 
+    //QUERIES VANUIT DE DATABASEA
     /**
      * Totale omzet en toegepaste korting opvragen
      * uit de database
      */
-    public double getTotaleOmzetKortingDB() {
-        Query query = manager.createQuery("SELECT ROUND(SUM(korting)) FROM  Factuur");
-         return (Double)  query.getSingleResult();
-    }
-
-     /**
-     * Bereken gemiddelde omzet van alle facturen
-     * @return gemiddelde ozmet van alle facturen
+    /**
+     * Toon totale omzet uit database
      */
-    public double getGemiddeldeOmzetDB() {
-        Query query = manager.createQuery("SELECT ROUND(AVG(totaal - korting)) FROM Factuur");
-        return (Double) query.getSingleResult();
+    public void totaleGemiddeldeOmzetKorting(){
+        Query query = manager.createQuery("SELECT ROUND(SUM(totaal)), ROUND(SUM(korting)) FROM Factuur factuur");
+        List<Object[]> resultList = query.getResultList();
+        resultList.forEach(r -> System.out.println(Arrays.toString(r)));
     }
 
-    public double getGemiddeldeKortingDB() {
-        Query query = manager.createQuery("SELECT ROUND(AVG(korting)) FROM  Factuur");
-        return (Double) query.getSingleResult();
-    }
-
-    public double getGemiddeldePrijsDB() {
-        Query query = manager.createQuery("SELECT ROUND(AVG(totaal)) FROM  Factuur");
-        return (Double) query.getSingleResult();
+    /**
+     * Toon gemiddelde omzet uit database
+     */
+    public List<Object[]> getGemiddeldeOmzetKortingDB(){
+        Query query = manager.createQuery("SELECT id, ROUND(AVG(totaal)), korting FROM Factuur");
+        query.setMaxResults(3);
+        return query.getResultList();
     }
 
     /**
@@ -339,20 +334,23 @@ class KantineSimulatie {
      */
     public List<Object[]> getDrieHoogsteFacturenDB() {
         Query query = manager.createQuery(
-                "SELECT id, datum, korting, totaal FROM Factuur ORDER BY (totaal-korting) DESC");
+                "SELECT id, datum, korting, totaal FROM Factuur ORDER BY ROUND((totaal-korting)) DESC");
         query.setMaxResults(3);
         return query.getResultList();
     }
+
+
     /**
      * Verzamelt gegevens over de totale omzet per artikel
      * @return de totale omzetten van de artikelen
      */
     public List<Object[]> getTotaleOmzetPerArtikelDB() {
         Query query = manager.createQuery(
-                "SELECT f.datum, fr.artikel.naam, SUM(fr.artikel.verkoopPrijs - fr.artikel.korting) FROM FactuurRegel fr JOIN fr.factuur f GROUP BY fr.artikel.naam, f.datum"
+                "SELECT fr.artikel.naam, ROUND(SUM(fr.artikel.verkoopPrijs)), round(SUM(fr.artikel.korting)) FROM FactuurRegel fr JOIN fr.factuur f GROUP BY fr.artikel.naam"
         );
         return query.getResultList();
     }
+
     /**
      * Toon totale omzet uit database
      * @return
@@ -370,11 +368,9 @@ class KantineSimulatie {
      * @return de top drie artikelen met de hoogste omzet
      */
     public List<Object[]> getDrieArtikelenMetHoogsteOmzetDB() {
-        Query query = manager
-                .createQuery("SELECT artikel.naam, SUM(artikel.verkoopPrijs - artikel.korting) FROM FactuurRegel GROUP BY artikel.naam ORDER BY SUM(artikel.verkoopPrijs) DESC");
+        Query query = manager.createQuery("SELECT artikel.naam, ROUND(SUM(artikel.verkoopPrijs - artikel.korting)) FROM FactuurRegel GROUP BY artikel.naam ORDER BY SUM(artikel.verkoopPrijs) DESC");
         query.setMaxResults(3);
         return query.getResultList();
     }
-
 }
 
