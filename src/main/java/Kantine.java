@@ -43,10 +43,10 @@ public class Kantine {
     /**
      * Deze methode handelt de rij voor de kassa af.
      */
-    public void verwerkRijVoorKassa() {
+    public void verwerkRijVoorKassa(int i) {
         while (kassarij.isErEenRij()) {
             try {
-                kassa.rekenAf(kassarij.eerstePersoonInRij());
+                kassa.rekenAf(kassarij.eerstePersoonInRij(),i);
             } catch (TeWeinigGeldException e) {
                 e.getMessage();
             }

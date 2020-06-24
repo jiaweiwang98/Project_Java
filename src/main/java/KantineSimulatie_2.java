@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.*;
 import javax.persistence.Persistence;
 import javax.persistence.EntityManager;
@@ -213,7 +214,7 @@ class KantineSimulatie {
 
 
             // verwerk rij voor de kassa
-            kantine.verwerkRijVoorKassa();
+            kantine.verwerkRijVoorKassa(i);
             // druk de dagtotalen af en hoeveel personen binnen
             // zijn gekomen
             System.out.println(" ");
@@ -271,29 +272,20 @@ class KantineSimulatie {
         System.out.println("Gemiddelde omzet: €" + (float) Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
         System.out.println("- - - - - - - - - - - - - - - - -");
         System.out.println("Totale omzet: €" + totaleGemiddeldeOmzet() + ", toegepaste korting: €" + totaleKorting());
-        System.out.println("De gemiddelde omzet: €" + getGemiddeldeOmzetFactuurDB() + ", gemiddelde toegepaste korting: €" + gemiddeldeKorting() + "per factuur");
+        System.out.println("De gemiddelde omzet: €" + getGemiddeldeOmzetFactuurDB() + ", gemiddelde toegepaste korting: €" + gemiddeldeKorting() + " per factuur");
         System.out.println("- - - - - - - - - - - - - - - - -");
         System.out.println("Top 3 facturen: ");
         for (Object[] factuur : getDrieHoogsteFacturenDB()) {
             System.out.println(Arrays.toString(factuur));
         }
         System.out.println(" ");
-        System.out.println("Totale omzet per artikel: ");
-        for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
-            System.out.println(Arrays.toString(artikel));
-        }
+//        System.out.println("Totale omzet per artikel: ");
+//        for (Object[] artikel : getTotaleOmzetPerArtikelDB(DAGEN)) {
+//            System.out.println(Arrays.toString(artikel));
+//        }
         System.out.println(" ");
-        System.out.println("\nDe totale omzet per artikel, per dag:");
-        for(int x = 1; x < DAGEN; x++) {
-            System.out.println("Dag: " + x );
-            System.out.println("-   -   -   -   -   -   -   -   -");
-            for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
-                    for (int i = 0; i < DAGEN; i++) {
-                            System.out.println(Arrays.toString(artikel));
-                    }
-                System.out.println(" ");
-            }
-        }
+        System.out.println("De totale omzet per artikel, per dag:");
+        getTotaleOmzetPerArtikelDB(DAGEN);
         System.out.println(" ");
         System.out.println("Top 3 artikelen: ");
         for (Object[] artikel : getDriePopulaireArtikelenDB()) {
@@ -348,7 +340,7 @@ class KantineSimulatie {
      */
     public List<Object[]> getDrieHoogsteFacturenDB() {
         Query query = manager.createQuery(
-                "SELECT id, datum, korting, totaal FROM Factuur ORDER BY ROUND((totaal-korting)) DESC");
+                "SELECT id, datum, ROUND(korting), ROUND(totaal) FROM Factuur ORDER BY ROUND((totaal-korting)) DESC");
         query.setMaxResults(3);
         return query.getResultList();
     }
@@ -357,11 +349,16 @@ class KantineSimulatie {
      * Verzamelt gegevens over de totale omzet per artikel
      * @return de totale omzetten van de artikelen
      */
-    public List<Object[]> getTotaleOmzetPerArtikelDB() {
-        Query query = manager.createQuery(
-                "SELECT fr.artikel.naam, ROUND(SUM(fr.artikel.verkoopPrijs)), round(SUM(fr.artikel.korting)) FROM FactuurRegel fr JOIN fr.factuur f GROUP BY fr.artikel.naam"
-        );
-        return query.getResultList();
+    public void getTotaleOmzetPerArtikelDB(int dagen) {
+            for (int i = 0; i < dagen; i++) {
+                int dag = i + 1;
+                System.out.println("Dag " + dag + ": " + LocalDate.now().plusDays(i));
+                Query query = manager
+                        .createQuery("SELECT fr.artikel.naam, ROUND(SUM(fr.artikel.verkoopPrijs)), ROUND(SUM(fr.artikel.korting)) FROM FactuurRegel fr JOIN fr.factuur f WHERE f.datum = '"+ LocalDate.now().plusDays(i)+ "'GROUP BY fr.artikel.naam ");
+                List<Object[]> resultList = query.getResultList();
+                resultList.forEach(r -> System.out.println(Arrays.toString(r)));
+                System.out.println(" ");
+            }
     }
 
     /**
