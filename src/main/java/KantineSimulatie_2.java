@@ -286,10 +286,22 @@ class KantineSimulatie {
             System.out.println(Arrays.toString(artikel));
         }
         System.out.println(" ");
+        //printOmzetPerArtikelPerDag();
+
         System.out.println("\nDe totale omzet per artikel, per dag:");
+
         for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
-            System.out.println(Arrays.toString(artikel));
+            for(int x = 1; x < DAGEN; x++) {
+                System.out.println("Dag: " + x );
+                for (int i = 0; i < DAGEN; i++) {
+                    System.out.println(Arrays.toString(artikel));
+                }
+            }
+
+
         }
+
+
         System.out.println(" ");
         System.out.println("Top 3 artikelen: ");
         for (Object[] artikel : getDriePopulaireArtikelenDB()) {
@@ -376,5 +388,16 @@ class KantineSimulatie {
         query.setMaxResults(3);
         return query.getResultList();
     }
+    /*private String printOmzetPerArtikelPerDag(double totaleGemiddeldeOmzet) {
+        int i = 0;
+        StringBuilder omzetPerArtikelPerDag = new StringBuilder("\nDe totale omzet per artikel, per dag:");
+        for (Object[] artikel : getTotaleOmzetPerArtikelDB()) {
+            String[] dag = {"Dag 1", "Dag 2", "Dag 3", "Dag 4", "Dag 5", "Dag 6", "Dag 7"};
+            omzetPerArtikelPerDag.append(dag[i]).append(": €").append(artikel).append("/n");
+            i++;
+        }
+        return omzetPerArtikelPerDag.toString();
+    }
+     */
 }
 
