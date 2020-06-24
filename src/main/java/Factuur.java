@@ -141,7 +141,7 @@ import java.util.Iterator;
                 + "- - - - - - - - - - - - - - - - - \n"
                 + "Datum  \t\t\t\t " +  datum + " \n"
                 + klant.getKlant().toString() + " \n"
-                + "Betaalwijze \t\t\t" + klant.getKlant().getBetaalwijze()+ "\n"
+                + "Betaalwijze \t\t\t " + klant.getKlant().getBetaalwijze()+ "\n"
                 + "--------------------------------- \n"
                 + "\t  Bedankt en tot ziens!\t\n"
                 + " \n";
