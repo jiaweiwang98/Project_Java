@@ -279,11 +279,6 @@ class KantineSimulatie {
             System.out.println(Arrays.toString(factuur));
         }
         System.out.println(" ");
-//        System.out.println("Totale omzet per artikel: ");
-//        for (Object[] artikel : getTotaleOmzetPerArtikelDB(DAGEN)) {
-//            System.out.println(Arrays.toString(artikel));
-//        }
-        System.out.println(" ");
         System.out.println("De totale omzet per artikel, per dag:");
         getTotaleOmzetPerArtikelDB(DAGEN);
         System.out.println(" ");
