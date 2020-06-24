@@ -270,11 +270,8 @@ class KantineSimulatie {
         System.out.println("Gemiddelde aantal verkochte artikelen: " + Math.round(Administratie.berekenGemiddeldAantal(verkochtAantalArtikelen) * 100) / 100);
         System.out.println("Gemiddelde omzet: €" + (float) Math.round(Administratie.berekenGemiddeldeOmzet(omzet) * 100) / 100);
         System.out.println("- - - - - - - - - - - - - - - - -");
-        System.out.println("Totale omzet en toegepaste korting: €" + totaleGemiddeldeOmzet() + ", €" + totaleKorting());
-        System.out.println("De gemiddelde omzet: €");
-        for (Object[] factuur : getGemiddeldeOmzetKortingDB()) {
-            System.out.println(Arrays.toString(factuur));
-        }
+        System.out.println("Totale omzet: €" + totaleGemiddeldeOmzet() + ", toegepaste korting: €" + totaleKorting());
+        System.out.println("De gemiddelde omzet: €" + getGemiddeldeOmzetFactuurDB() + ", gemiddelde toegepaste korting: €" + gemiddeldeKorting() + "per factuur");
         System.out.println("- - - - - - - - - - - - - - - - -");
         System.out.println("Top 3 facturen: ");
         for (Object[] factuur : getDrieHoogsteFacturenDB()) {
@@ -332,12 +329,17 @@ class KantineSimulatie {
     }
 
     /**
-     * Toon gemiddelde omzet uit database
+     * Toon gemiddelde omzet en toegepaste korting uit database
      */
-    public List<Object[]> getGemiddeldeOmzetKortingDB(){
-        Query query = manager.createQuery("SELECT id, ROUND(AVG(totaal)), korting FROM Factuur");
-        query.setMaxResults(3);
-        return query.getResultList();
+
+    public double getGemiddeldeOmzetFactuurDB() {
+        Query query = manager.createQuery("SELECT ROUND(AVG(totaal)) FROM Factuur");
+        return (Double) query.getSingleResult();
+    }
+
+    public double gemiddeldeKorting(){
+        Query query = manager.createQuery("SELECT ROUND(AVG(korting)) FROM Factuur factuur");
+        return (Double) query.getSingleResult();
     }
 
     /**
@@ -383,5 +385,7 @@ class KantineSimulatie {
         query.setMaxResults(3);
         return query.getResultList();
     }
+
+
 }
 
